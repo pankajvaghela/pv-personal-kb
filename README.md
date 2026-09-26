@@ -114,7 +114,9 @@ The numbers are **attention order, not hierarchy**. The folders you touch most s
 | `/pkb-capture <thing>` | Throw something into the inbox. No decisions, no sorting. |
 | `/pkb-triage` | File inbox items into the right folders — shows a plan first. |
 | `/pkb-workboard` | Show, add, complete, or drop action items. |
-| `/pkb-wishlist` | Show, add to, or resolve the wishlist — held until you've wanted it long enough. |
+| `/pkb-wishlist` | Show, add to, or resolve the wishlist — the inbox for desire. |
+| `/pkb-curious` | Note something you want to know about — a seed note, no deadline. |
+| `/pkb-bucket` | Bucket list — life-scale things to do, with room to research them. |
 | `/pkb-new-project <name>` | Start a project note from the template. |
 | `/pkb-new-person <name>` | Create or update a person note — searches for a duplicate first. |
 | `/pkb-review` | Weekly sweep: inbox count, stale projects, orphan notes, broken links. |
@@ -167,17 +169,47 @@ Two things worth knowing before you wire up a source. MCP tool names are specifi
 
 ## The wishlist
 
-`30-lifestyle/wishlist.md` is a single file, one line per wish, and it is built around the way wishlists actually fail. They don't fail at storing things — storing is free. They fail because nothing ever forces a decision, so the list only grows and eventually stops being read.
+`30-lifestyle/wishlist.md` is **an inbox for desire** — a single file, one line per wish, held until it's clear what to do with it. It's an inbox, but not one you clear in a sitting. Every other inbox in this vault is processed as fast as possible; this one is processed *slowly, on purpose*, because desire isn't legible on the day you feel it.
 
-Two rules do the work:
+Wishlists don't fail at storing things — storing is free. They fail because nothing ever forces a decision, so the list only grows and eventually stops being read. Three rules do the work:
+
+**Capture asks nothing.** Same as `/pkb-capture` — the judgment happens at review. A wishlist entry that costs a question to write is one that never gets written, so `add` takes whatever you say and defaults the rest.
 
 **Desire is tested by waiting, not recorded.** "How much do I want this?" answered at the moment of wanting is just the impulse talking — which is why high/medium/low priority collapses within a week. Time is the honest measure, so every wish gets a cooling-off period derived from its cost: 7 days under $100, 14 days to $500, 30 days above. Anything with no cost — a place, a skill, a thing to do — gets 30 days, because money is capped and time isn't.
 
 **Importance exempts you from the wait.** A mattress you need but don't want will never clear a cooling-off period with any enthusiasm. Those go under `## Needed` and have no hold at all.
 
-So the file is organized by readiness, not by category, and the review is what makes it real: `/pkb-wishlist review` forces buy, extend, promote, or drop on everything off hold, and flags anything that has been off hold for 60+ days as a decision being avoided rather than a pending purchase. `/pkb-review` sweeps it weekly, which is the only thing that guarantees anyone looks at it.
+So the file is organized by readiness, not by category, and the review is what makes it real: `/pkb-wishlist review` forces **promote, extend, drop, or buy** on everything off hold, and flags anything off hold for 60+ days as a decision being avoided rather than a pending purchase. `/pkb-review` sweeps it weekly, which is the only thing that guarantees anyone looks at it.
 
-The exit matters as much as the entry. A wish that gains a target date becomes a **goal**; a place becomes a **trip**; a single next action becomes a **workboard line**. The wishlist is an antechamber, not a destination — and nothing leaves it by being ignored, which is what keeps it from becoming a graveyard. Dropped wishes stay in the file, checked, so you stop re-adding the same thing every few months.
+A wish leaves by being **acted on**, which usually means it's become legible enough to promote — into a goal, a project, a trip, or a workboard line. Promotion is the primary exit and the one to steer toward: a wish that has been promoted has done its job. Nothing leaves by being ignored, which is what keeps it from becoming a graveyard. Dropped wishes stay in the file, checked, so you stop re-adding the same thing every few months.
+
+### Seeds — the low-consequence ones
+
+Not everything you want is a wish. "Jan Schoonhoven relief" isn't something to buy or do; it's something to *know about*. Those end in knowing rather than in an act, and they need none of the machinery above — no cost, no hold, no review pressure.
+
+They're **seed notes** in `70-knowledge/` with `status: seed`: a stub that exists so the learning has somewhere to land and so it can be linked to from a gallery visit, a project, or a wish to buy a print. A line in a list can be linked from nowhere, which is the whole reason this vault uses wiki-links.
+
+The dividing line is **what the thing ends in**. Ends in an act — buy it, go there, do it — → wishlist. Ends in knowing → seed.
+
+A seed has no urgency and must never acquire any: no due date, no count that should trend to zero. A seed you haven't gotten to isn't a failure and a list of forty isn't a problem. The moment seeds get treated as a backlog they stop being curiosities and start being guilt — which is why `/pkb-review`'s orphan-notes section explicitly skips them. `/pkb-curious` creates one, `list`s them, and `open`s one when you finally dig in.
+
+### The bucket list
+
+Same treatment, third tier. **There is no bucket list file** — a bucket list item is a goal that hasn't got a date yet: `20-goals/`, `horizon: life`, no `target`.
+
+It's a note rather than a line because of what you do with it. `templates/goal.md` already has `## What done looks like`, `## Leading actions`, and `## Progress` — that's the "slowly add notes and work towards it" loop, already built. `/pkb-bucket work <item>` is that loop with somewhere to put what you find out.
+
+The difference from a wish is scale, not kind: a wish is something you'd *like*, a bucket list item is something you'd **regret never doing**. Practical test — if one line is enough it's a wish; if it needs a note to hold your research, it's a goal. The difference from a normal goal is only the date: when one appears, you set `target` and narrow `horizon`, same note, now scheduled.
+
+And no pressure, deliberately. A bucket list item is allowed to wait years — that's what makes it a bucket list rather than a backlog. `/pkb-review` surfaces only the ones that have started to move, because that's the one useful signal.
+
+The three tiers together:
+
+| | Lives as | Review pressure |
+|---|---|---|
+| Curiosity — ends in knowing | `70-knowledge/` seed | none, ever |
+| Wish — ends in an act, months out | `30-lifestyle/wishlist.md` line | forced at hold expiry |
+| Bucket list — ends in an act, life-scale | `20-goals/` note, `horizon: life` | none, but momentum gets surfaced |
 
 ## Design choices
 

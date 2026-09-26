@@ -116,12 +116,12 @@ If you ever find a literal token in `<root>/.pkb/config.json`, stop and say so. 
 | `00-inbox/`     | Unsorted capture, awaiting triage.                             | `inbox`       |
 | `05-daily/`     | One note per day, filed by month. Never triaged.               | `daily`       |
 | `10-workboard/` | Action items — what is live right now. See below.              | `workboard`   |
-| `20-goals/`     | Outcomes with a target date.                                   | `goal`        |
+| `20-goals/`     | Outcomes — dated, or on the bucket list at `horizon: life`.    | `goal`        |
 | `30-lifestyle/` | Routines, health, habits, home, money. Holds `wishlist.md`.     | `lifestyle`   |
 | `40-travels/`   | Trips, itineraries, places.                                    | `trip`        |
 | `50-projects/`  | Time-bound efforts with a finish line. One folder per project. | `project`     |
 | `60-people/`    | One note per person.                                           | `person`      |
-| `70-knowledge/` | Evergreen notes and reference — the graph core.                | `note`        |
+| `70-knowledge/` | Evergreen notes and reference — the graph core. Seeds live here too, as `status: seed`. | `note`        |
 | `90-archive/`   | Done, dead, or dormant. Kept so links survive.                 | _(inherited)_ |
 | `templates/`    | Note skeletons.                                                | —             |
 
@@ -139,7 +139,7 @@ Minimum viable. Add a field only when a real query or view consumes it; an unuse
 ---
 title: Human-readable title
 type: project | person | trip | lifestyle | goal | note | inbox | daily | workboard | wishlist
-status: active | paused | done | archived
+status: active | seed | paused | done | archived
 created: 2026-09-26
 updated: 2026-09-26
 tags: []
@@ -151,7 +151,7 @@ Type-specific additions:
 - `project`: `owner`, `due`, `outcome`
 - `person`: `relationship`, `last_contact` (date)
 - `trip`: `start`, `end`, `places` (list)
-- `goal`: `target` (date), `horizon` (`year` | `quarter` | `season`)
+- `goal`: `target` (date), `horizon` (`life` | `year` | `quarter` | `season`)
 
 `tags` are lowercase, hyphenated, no `#`. Nested tags (`area/health`, `project/kitchen`) are encouraged — they cross-cut folders without inventing new ones.
 
@@ -203,7 +203,11 @@ Rules:
 
 Sections: `## Off hold` (the waiting period is over — needs a decision), `## Holding` (inside it — leave alone), `## Needed` (things actually needed and not being bought, where the delay is the problem rather than the signal; no waiting period), `## Done` (bought or dropped, checked, never deleted).
 
-**The wishlist is an antechamber, not a destination.** A wish has no date and no plan — that is what makes it a wish. It leaves three ways: bought, promoted, or dropped. Never by being ignored, which is the failure mode every wishlist has.
+**The wishlist is an inbox for desire.** Something you want, captured cheaply, held until it is clear what to do with it. It is an inbox, but not one you clear in a sitting — every other inbox in this vault is processed as fast as possible, and this one is processed **slowly, on purpose**, because desire is not legible on the day you feel it.
+
+That has two consequences worth holding to. Capture asks nothing, exactly like `/pkb-capture` — the judgment happens at review, and a wishlist entry that costs a question to write is one that never gets written. And the hold is the *triage delay*, not a delay before triage: the clock starts when the wish is captured, because the desire is already ageing and restarting it at review would defeat the only mechanism that works.
+
+**A wish leaves by being acted on, not by being ignored.** Acting on it usually means the desire has become legible enough to promote — into a goal, a project, a trip, or a workboard line, including a plain "buy X" task. A small decided purchase is simply done. A wish that no longer looks worth it is dropped, recorded as checked so the same thing is not re-added in three months. "Leave it" is the one answer that is not allowed, and it is the failure mode every wishlist has.
 
 That gives the boundary with everything adjacent, and it is worth holding firmly:
 
@@ -220,6 +224,58 @@ That gives the boundary with everything adjacent, and it is worth holding firmly
 **Importance is what exempts you from the wait**, and that is its only job here. A need does not become more urgent by sitting on a list for a month.
 
 **Nothing computed is stored.** No totals, no day counts, no "waited 42 days" — those are derived at read time. A stored total is a number that goes stale and has to be maintained.
+
+## Seeds
+
+Not everything worth keeping is a task or a decision. "Jan Schoonhoven relief" is neither — it is something to know about, eventually, when it comes up.
+
+A curiosity is a **note**, not a list line: a stub in `70-knowledge/` with `status: seed`. It is a note because the note is where the learning will land, and because a note can be linked to — from a gallery visit, from a wish to buy a print, from a note about the Nul group. A line in a list can be linked from nowhere, which is the entire reason this vault uses wiki-links.
+
+**What separates a seed from a wishlist item is what it ends in.**
+
+|                    | Wishlist                                | Seed                                |
+| ------------------ | --------------------------------------- | ----------------------------------- |
+| Ends in            | an act — buy, go, do                    | knowing                             |
+| Lives in           | `30-lifestyle/wishlist.md`              | `70-knowledge/`, `status: seed`     |
+| Has a cost and a hold | yes                                  | no                                  |
+| Decays if ignored  | yes — and that is information about you | no — and that is fine               |
+| Leaves by          | bought, promoted, dropped               | being developed, or never           |
+
+**A seed has no urgency and must not acquire any.** No due date, no hold, no review section, no count that should trend to zero. A seed you have not gotten to is not a failure and a list of forty is not a problem. The moment seeds are treated as a backlog they stop being curiosities and start being guilt.
+
+Everything else is already in the schema:
+
+```yaml
+---
+title: Jan Schoonhoven
+type: note
+status: seed
+created: 2026-09-26
+updated: 2026-09-26
+tags: [art, occasion/home]
+---
+
+Nul group, Dutch, white reliefs. Worth knowing how they were made — cardboard and cheap
+filler, painted white, which is the opposite of what they look like.
+```
+
+The body is optional, and one line is a complete seed — why it is worth knowing, or where it came from. Developing it later means writing the note and flipping `status` to `active`. Nothing moves, nothing is converted, and every link already pointing at it keeps working.
+
+**Occasion tags** are what make a seed findable when its moment arrives: `#occasion/home` for the art you would buy for the flat, `#occasion/date` for the topic you would bring up, `#occasion/gift`. Use them only when there is a real occasion — a tag nobody queries is another field to maintain for nothing.
+
+A seed can lead to a wish, and that is a link rather than a conversion: the wishlist line references `[[Jan Schoonhoven]]` and the seed stays where it is.
+
+## The bucket list
+
+**There is no bucket list folder, file, or type. A bucket list item is a goal that has not got a date yet** — `20-goals/`, `type: goal`, `horizon: life`, no `target`.
+
+It is a note rather than a list line because of what the user does with it: accumulates research, names leading actions, and records progress. `## Leading actions` and `## Progress` in the goal template are exactly that machinery, and they already exist. A wishlist line can hold none of it.
+
+**The difference from a wish** is scale and certainty, not kind. Both end in an act; a wish is something you would *like*, decided within months, and a bucket list item is something you would **regret never doing**. The practical test is whether it needs a note: if one line is enough, it is a wish; if it needs research and a plan, it is a goal.
+
+**The difference from a goal** is only the date. When a bucket list item acquires one, set `target` and narrow `horizon` to `year` or `quarter`. Nothing moves and nothing converts — it is the same note, now scheduled, and every link to it still works. That transition is the whole point: the bucket list exists so that life-scale wants accumulate until one of them becomes real.
+
+**No urgency, and no forced review.** A bucket list item is allowed to sit for years; that is what makes it a bucket list rather than a backlog. `/pkb-review` may ask whether any are ready to become real, but it must never imply that an unscheduled one is overdue.
 
 ## Daily notes
 

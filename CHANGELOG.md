@@ -7,6 +7,18 @@ Two kinds of change live here, and the difference matters if you have a vault al
 
 Every version below states which it is, so you can tell at a glance whether an upgrade needs action.
 
+## 0.10.0
+
+- Add `/pkb-curious` and `status: seed`: things worth knowing about eventually — an artist, a period, a question — that are not tasks and not purchases. A seed is a **note** in `70-knowledge/` rather than a list line, because the note is where the learning lands and because a note can be linked to. One line of body is a complete seed.
+- Seeds carry no dates, holds, or deadlines, and `/pkb-review`'s orphan-notes section now excludes them — an unlinked seed is the expected state, not a problem.
+- `/pkb-triage` files "check out X" captures as seeds rather than as actions.
+- **The wishlist is an inbox for desire.** `/pkb-wishlist add` no longer asks for a cost — capture asks nothing, exactly like `/pkb-capture`, and the judgment happens at review. An unpriced wish gets the 30-day default hold, which starts at capture rather than at assessment since the desire is already ageing.
+- `review` now leads with **promotion** as the primary exit: acting on a desire usually means it has become legible enough to move into a goal, a project, a trip, or a workboard line. Buying a specific thing counts — "buy the keyboard" is a task.
+- The dividing line between the two is what a thing **ends in**: an act (buy, go, do) → wishlist; knowing → seed.
+- Add `/pkb-bucket`, and `horizon: life` for goals. **There is no bucket list file** — a bucket list item is a goal that has not got a date yet: `20-goals/`, no `target`. The goal template's `## Leading actions` and `## Progress` are already the "slowly work towards it" loop, and `/pkb-bucket work <item>` is that loop with somewhere to put what you find out. When a date appears, set `target` and narrow `horizon` — same note, now scheduled.
+- `/pkb-review` surfaces bucket list items only when they have started to move. An undated one is never reported as overdue; waiting years is what makes it a bucket list rather than a backlog.
+- **Existing vaults:** nothing to do. No new folders or files; `status: seed` and `horizon: life` are new values on existing fields. Copy in the updated `templates/goal.md` if you want the horizon hint.
+
 ## 0.9.0
 
 - Add `/pkb-wishlist` and `30-lifestyle/wishlist.md`: things that might be wanted, held until they have been wanted long enough to trust. Each wish gets a cooling-off period derived from its cost — 7 days under $100, 14 days to $500, 30 days above, and 30 days for anything with no cost at all, since money is capped and time is not.

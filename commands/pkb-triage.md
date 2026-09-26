@@ -20,4 +20,6 @@ Scope: $ARGUMENTS (if empty, triage every file in `<root>/00-inbox/`).
 
 **Step 4 — Sweep.** If an item is an action, add it to `10-workboard/workboard.md` under the right horizon and do not also file it as a note.
 
+If an item is a **curiosity** — something to know about rather than act on — file it in `70-knowledge/` as a seed with `status: seed`, and say so in the table. Do not put it on the workboard (it is not an action) and do not put it on the wishlist (it does not end in a purchase or a trip). A one-line body is a complete seed; do not pad it out to look like a finished note.
+
 Report: items filed by destination, items deferred and why, and any broken wiki-links or near-duplicates you noticed. Keep it to a table plus two or three lines.
