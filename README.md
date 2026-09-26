@@ -45,7 +45,7 @@ It asks where the vault should live and what to call it, scaffolds the folders, 
 | `/pkb-wishlist` | Show, add to, or resolve the wishlist. |
 | `/pkb-curious` | Note something you want to know about — a seed note. |
 | `/pkb-dreams` | Things you want to do in your life. |
-| `/pkb-travels` | Travels index — the table of every trip, kept in sync with the notes. |
+| `/pkb-travels` | Travels index — every trip as a table, generated from the trip notes. |
 | `/pkb-new-project <name>` | Start a project note from the template. |
 | `/pkb-new-person <name>` | Create or update a person note — searches for a duplicate first. |
 | `/pkb-review` | Weekly sweep: inbox, workboard, wishlist, dreams, travels, stale projects, orphan notes, broken links. |
@@ -156,7 +156,7 @@ tags: []
 
 Dates are ISO-8601, always. `created` is never rewritten; `updated` changes whenever the note does.
 
-Type-specific fields: `project` → `owner`, `due`, `outcome`. `person` → `relationship`, `last_contact`. `trip` → `start`, `end`, `places`. `goal` → `target`, `horizon` (`life` | `year` | `quarter` | `season`).
+Type-specific fields: `project` → `owner`, `due`, `outcome`. `person` → `relationship`, `last_contact`. `trip` → `start`, `end`, `places`, `people`. `goal` → `target`, `horizon` (`life` | `year` | `quarter` | `season`).
 
 ## If you happen to use Obsidian
 

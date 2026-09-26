@@ -61,7 +61,7 @@ tags: []
 ---
 ```
 
-Type-specific: `project` gets `owner`/`due`/`outcome`; `person` gets `relationship`/`last_contact`; `trip` gets `start`/`end`/`places`; `goal` gets `target`/`horizon`.
+Type-specific: `project` gets `owner`/`due`/`outcome`; `person` gets `relationship`/`last_contact`; `trip` gets `start`/`end`/`places`/`people`; `goal` gets `target`/`horizon`.
 
 ## Workboard
 
@@ -77,8 +77,8 @@ A wish is deliberately undated and unplanned — that is what makes it a wish. I
 
 ## Travels
 
-`40-travels/travels.md` is the index: a table of every trip, under `## Planned` and `## Been`.
+`40-travels/travels.md` is the index: a table of every trip — `| Trip | Start | End | Places | People |` — under `## Planned` and `## Been`. Start and end are separate columns rather than a range, and a missing value is `—`.
 
-**It is generated, not curated** — rebuilt from the `title`, `start`, `end`, `places`, and `status` frontmatter of the other notes in the folder. Never hand-edit a row: if a row is wrong, the note's frontmatter is wrong. A hand-patched row is silently reverted the next time the index is rebuilt.
+**It is generated, not curated** — rebuilt from the `title`, `start`, `end`, `places`, `people`, and `status` frontmatter of the other notes in the folder. Never hand-edit a row: if a row is wrong, the note's frontmatter is wrong. A hand-patched row is silently reverted the next time the index is rebuilt.
 
 A trip is a note named for the trip rather than the place (`Kyoto 2026`, not `Kyoto`) so two trips to the same city get two notes. Anything not on the index is either a new note waiting for a rebuild, or a place that belongs in `## Dreams`.

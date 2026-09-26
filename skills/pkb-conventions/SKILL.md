@@ -150,7 +150,7 @@ Type-specific additions:
 
 - `project`: `owner`, `due`, `outcome`
 - `person`: `relationship`, `last_contact` (date)
-- `trip`: `start`, `end`, `places` (list)
+- `trip`: `start` (date), `end` (date), `places` (list), `people` (list)
 - `goal`: `target` (date), `horizon` (`life` | `year` | `quarter` | `season`)
 
 `tags` are lowercase, hyphenated, no `#`. Nested tags (`area/health`, `project/kitchen`) are encouraged — they cross-cut folders without inventing new ones.
@@ -269,9 +269,15 @@ A seed can lead to a wish, and that is a link rather than a conversion: the wish
 
 `40-travels/` is flat — one note per trip, titled with the trip rather than the place (`Kyoto 2026`, not `Kyoto`; two trips to the same city need two notes). `travels.md` in the same folder is the **index**: a table of every trip, generated from the trip notes.
 
-**The index is generated, not curated.** `/pkb-travels` rebuilds it from each note's `title`, `start`, `end`, `places`, and `status`. Never hand-edit a row — fix the note's frontmatter and regenerate, or the next rebuild silently reverts it. The file exists so the whole travel history is visible as a table in any editor; it is not a second place where trip facts live.
+**The index is generated, not curated.** `/pkb-travels` rebuilds it from each note's `title`, `start`, `end`, `places`, `people`, and `status`. Never hand-edit a row — fix the note's frontmatter and regenerate, or the next rebuild silently reverts it. The file exists so the whole travel history is visible as a table in any editor; it is not a second place where trip facts live.
 
-`## Planned` holds `status: active` trips soonest-first; `## Been` holds `status: done` trips most-recent-first. A note with any other status is listed separately as unplaced rather than dropped — **a trip missing from its own index is worse than an untidy one.**
+The table is `| Trip | Start | End | Places | People |`. **Dates are separate columns, never a `start → end` range** — a range is a rendering of two fields, and a column you cannot sort or read is a column that has thrown the data away. Missing values are `—`.
+
+`people` names who the trip was with, and each one wiki-links to their `60-people/` note **when that note exists** — otherwise the name is plain text. A link to a person note that has not been written yet is allowed, but a name rendered as a link that nothing resolves is a broken link `/pkb-review` will report forever, so the link is earned rather than assumed.
+
+`## Planned` holds `status: active` trips soonest-first by `start`; `## Been` holds `status: done` trips most-recent-first by `end`. A note with any other status is listed separately as unplaced rather than dropped — **a trip missing from its own index is worse than an untidy one.**
+
+**The note is the record; the index is a view of it.** A trip note carries the `## Outline` of the trip in phases, the day-by-day `## Plan`, a `## Booked` list where a checkbox means *confirmed*, a `## Budget` estimated against actual, `## Packing / prep`, and `## After` for what was worth it. Two things deliberately do not live there: **a total** (a sum is derived, and a stored sum goes stale) and **a trip to-do list** (an action with a date belongs on the workboard, where it will actually be seen).
 
 **Places you want to go but have not started planning are not here.** They are `## Dreams` in `30-lifestyle/wishlist.md`. A place becomes a trip note when it becomes a plan, which is the same promotion every other want goes through.
 

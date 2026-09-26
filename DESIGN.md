@@ -104,6 +104,18 @@ So the index is a **view**, and the trip note is the record. A row that's wrong 
 
 The line to hold: the scaffold ships an empty index, and only the command writes it. Nothing else in the vault is generated, and no command should acquire a second file like this without the same property — rebuildable from the notes, worth nothing on its own.
 
+One detail generalizes past this file. The table has a **Start column and an End column, not a `2026-11-03 → 2026-11-14` range**, and people get a column of their own next to places. A range in a cell looks tidier and is worse: it's a rendering of two facts that can no longer be sorted, compared, or read by anything but an eye. The same reasoning keeps the wishlist from storing a total and the sources read-only — **a thing that can be derived should not be the thing that is stored.** Render freely; store fields.
+
+## What a trip note refuses to hold
+
+The trip template is modelled on a real planning document, and the interesting part is what it leaves out.
+
+**No total row in the budget.** Estimated against actual, per category, and stop. A total is a sum, and a stored sum is wrong the moment a line changes — the same rule that keeps a wishlist from carrying its own cost running total. Add the column up when you want to know it; that takes a second and is always right.
+
+**No trip to-do list.** This is the one worth being deliberate about, because the document it came from has a prominent one, and copying it would duplicate the workboard. An action with a date belongs on the workboard, where `/pkb-morning` reads it and `/pkb-review` will notice it going stale; a checklist inside a trip note is a second list nobody sweeps. Trip notes are opened the week before the trip, which is precisely when a forgotten action is too late to fix.
+
+**And `## Booked` does something a record does not.** A checkbox there means *confirmed*, so the section doubles as the trip's status: a trip with dates and nothing ticked is visibly not yet real. That is why the travels index reports dates and the note reports readiness — the index can see a trip's dates from the outside, and only the note knows whether a single thing has been booked.
+
 ## Two config files, split by what belongs in git
 
 `~/.config/pv-personal-kb/config.json` holds the vault's path and secrets. `<vault>/.pkb/config.json` holds everything else — the name, the sources — and is committed.

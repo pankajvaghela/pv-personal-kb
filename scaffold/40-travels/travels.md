@@ -15,8 +15,8 @@ An index of every trip. One row per trip note in this folder — the note holds 
 
 Trips with `status: active`. Soonest first.
 
-| Trip | Dates | Places |
-| --- | --- | --- |
+| Trip | Start | End | Places | People |
+| --- | --- | --- | --- | --- |
 
 _Nothing planned. `/pkb-travels add <place>` starts one._
 
@@ -24,8 +24,8 @@ _Nothing planned. `/pkb-travels add <place>` starts one._
 
 Trips with `status: done`. Most recent first.
 
-| Trip | Dates | Places |
-| --- | --- | --- |
+| Trip | Start | End | Places | People |
+| --- | --- | --- | --- | --- |
 
 _Nothing yet._
 
