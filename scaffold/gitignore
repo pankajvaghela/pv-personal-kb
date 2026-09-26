@@ -1,0 +1,22 @@
+# --- Editor state -----------------------------------------------------------
+# Obsidian keeps per-machine UI state here. It churns on every open and is
+# never worth a commit; the rest of .obsidian/ is your config and IS worth it.
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.obsidian/cache
+.trash/
+
+# --- Credentials ------------------------------------------------------------
+# Obsidian plugins store API tokens in plaintext data.json. If a plugin ever
+# needs one, ignore that plugin's folder specifically rather than committing
+# the token into a repo that may later be pushed.
+# .obsidian/plugins/<plugin-name>/data.json
+
+# --- Attachments scratch ----------------------------------------------------
+00-inbox/attachments/.DS_Store
+
+# --- OS / tooling -----------------------------------------------------------
+.DS_Store
+Thumbs.db
+*.log
+*.tmp

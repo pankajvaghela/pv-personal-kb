@@ -1,0 +1,6 @@
+.DS_Store
+*.log
+
+# Per-machine config belongs in ~/.config/pv-personal-kb/config.json, never here.
+# If anything credential-shaped is ever added to this plugin, ignore it here.
+config.local.json
