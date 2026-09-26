@@ -11,17 +11,17 @@ The vault is plain Markdown files with YAML frontmatter. **The files are the sou
 
 **Markdown is the format. Everything else is a view of it.** Nothing here requires Obsidian or any other app. Delete every editor tomorrow and the vault is still a directory of readable text. Viewers are interchangeable — Obsidian, VS Code, iA Writer, GitHub, `less`.
 
-| Thing | Status |
-|---|---|
-| `.md` files with YAML frontmatter | **Required.** This is the format. |
-| The folder taxonomy | **Required.** Ordinary directories. |
-| GFM task lists | **Required.** Plain checkboxes. |
-| `[[Wiki-links]]` | **Required convention.** Read by Obsidian, Foam, Logseq, Dendron, Quartz, and most other folder-of-Markdown tools. Not CommonMark — see the note below. |
-| A Markdown viewer | **Suggested — pick any.** Obsidian is a good one: it renders the links, draws the graph, and shows frontmatter as properties. It is one option among several, not a requirement, and the vault must never be organized around it. |
-| Dataview, callouts, embeds | Optional, and Obsidian-only. Use them where they earn their keep; they render as nothing anywhere else. |
-| `📅 YYYY-MM-DD` on a workboard line | An Obsidian **Tasks** plugin convention. Elsewhere it is just an emoji — which is why the date stays readable as plain text. |
-| `.obsidian/` | Editor state. Git ignores the churn and keeps your config. |
-| `templates/` | Note skeletons using Obsidian's `{{title}}` / `{{date}}` variables. |
+| Thing                               | Status                                                                                                                                                                                                                            |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `.md` files with YAML frontmatter   | **Required.** This is the format.                                                                                                                                                                                                 |
+| The folder taxonomy                 | **Required.** Ordinary directories.                                                                                                                                                                                               |
+| GFM task lists                      | **Required.** Plain checkboxes.                                                                                                                                                                                                   |
+| `[[Wiki-links]]`                    | **Required convention.** Read by Obsidian, Foam, Logseq, Dendron, Quartz, and most other folder-of-Markdown tools. Not CommonMark — see the note below.                                                                           |
+| A Markdown viewer                   | **Suggested — pick any.** Obsidian is a good one: it renders the links, draws the graph, and shows frontmatter as properties. It is one option among several, not a requirement, and the vault must never be organized around it. |
+| Dataview, callouts, embeds          | Optional, and Obsidian-only. Use them where they earn their keep; they render as nothing anywhere else.                                                                                                                           |
+| `📅 YYYY-MM-DD` on a workboard line | An Obsidian **Tasks** plugin convention. Elsewhere it is just an emoji — which is why the date stays readable as plain text.                                                                                                      |
+| `.obsidian/`                        | Editor state. Git ignores the churn and keeps your config.                                                                                                                                                                        |
+| `templates/`                        | Note skeletons using Obsidian's `{{title}}` / `{{date}}` variables.                                                                                                                                                               |
 
 **Templates speak Obsidian.** They use `{{title}}` and `{{date:YYYY-MM-DD}}` — the one place the vault depends on an app's syntax, kept because it is what makes the Templates plugin useful. That is a deliberate exception, not a precedent: Claude substitutes these variables itself, so a note created by a command is correct with or without Obsidian. If you edit a template, keep the same variable form so both paths keep working.
 
@@ -37,12 +37,46 @@ The vault can live anywhere. Resolve it in this order:
 2. `~/.config/pv-personal-kb/config.json`:
 
    ```json
-   { "root": "/Users/you/01personal/brain", "name": "Brain" }
+   { "root": "/Users/you/path-to/brain", "name": "Brain" }
    ```
 
 3. **Neither present → stop.** Do not guess a path and do not create a vault by accident. Tell the user the config is missing and that `/pkb-setup` creates it.
 
 Read the config once at the start of a task and use that absolute path for every operation. Never hardcode a vault path into a note, a template, or this plugin's files.
+
+## Sources
+
+Some commands read from outside the vault — a calendar, a task list, a Notion inbox. Sources are **declared in the config, never hardcoded**, so adding one is a config edit rather than a code change.
+
+```json
+{
+  "root": "/Users/you/path-to/brain",
+  "name": "Brain",
+  "sources": [
+    { "id": "vault-inbox", "kind": "vault", "label": "Vault inbox", "path": "00-inbox", "enabled": true },
+    { "id": "workboard", "kind": "vault", "label": "Workboard", "path": "10-workboard/workboard.md", "enabled": true },
+    { "id": "calendar", "kind": "mcp", "label": "Today's calendar", "tool": "mcp__google-calendar__list_events", "args": { "timeMin": "$TODAY_START", "timeMax": "$TODAY_END" }, "enabled": true },
+    { "id": "notion-inbox", "kind": "mcp", "label": "Notion inbox", "tool": "mcp__notion__search", "args": {}, "enabled": false },
+    { "id": "tasks", "kind": "command", "label": "Google Tasks", "command": "gtsk list --json", "enabled": false }
+  ]
+}
+```
+
+Three kinds, and that is deliberately the whole vocabulary:
+
+| `kind`    | Reads from                    | Needs                            |
+| --------- | ----------------------------- | -------------------------------- |
+| `vault`   | A path inside the vault       | Nothing. Always available.       |
+| `mcp`     | An MCP tool, by name          | That MCP server to be connected. |
+| `command` | A shell command's stdout      | The command to exist.            |
+
+**Sources are read-only.** Nothing here writes back to a source — do not mark a Notion row processed, complete a remote task, or send mail. That would re-create the two-way sync problem this whole design avoids. When something is handled, record it in the vault.
+
+**`mcp` tool names are installation-specific.** They come from whichever servers the user has connected, and `/mcp` lists them. Never guess a name that looks adjacent — report it missing and point at `/mcp`.
+
+**Substitutions** available in `args` and `command`: `$TODAY`, `$NOW`, `$TODAY_START`, `$TODAY_END`, `$VAULT`. Resolve them before running anything.
+
+**A source that fails is not a source that is empty.** Anything reading a source must report `ok`, `empty`, or `failed` per source, and never let a failure pass as silence.
 
 ## Hard rules
 
@@ -55,18 +89,19 @@ Read the config once at the start of a task and use that absolute path for every
 
 ## Folder taxonomy
 
-| Folder | Holds | `type` |
-|---|---|---|
-| `00-inbox/` | Unsorted capture, awaiting triage. | `inbox` |
-| `10-workboard/` | Action items — what is live right now. See below. | `workboard` |
-| `20-goals/` | Outcomes with a target date. | `goal` |
-| `30-lifestyle/` | Routines, health, habits, home, money. | `lifestyle` |
-| `40-travels/` | Trips, itineraries, places. | `trip` |
-| `50-projects/` | Time-bound efforts with a finish line. One folder per project. | `project` |
-| `60-people/` | One note per person. | `person` |
-| `70-knowledge/` | Evergreen notes and reference — the graph core. | `note` |
-| `90-archive/` | Done, dead, or dormant. Kept so links survive. | *(inherited)* |
-| `templates/` | Note skeletons. | — |
+| Folder          | Holds                                                          | `type`        |
+| --------------- | -------------------------------------------------------------- | ------------- |
+| `00-inbox/`     | Unsorted capture, awaiting triage.                             | `inbox`       |
+| `05-daily/`     | One note per day — the briefing record. Never triaged.         | `daily`       |
+| `10-workboard/` | Action items — what is live right now. See below.              | `workboard`   |
+| `20-goals/`     | Outcomes with a target date.                                   | `goal`        |
+| `30-lifestyle/` | Routines, health, habits, home, money.                         | `lifestyle`   |
+| `40-travels/`   | Trips, itineraries, places.                                    | `trip`        |
+| `50-projects/`  | Time-bound efforts with a finish line. One folder per project. | `project`     |
+| `60-people/`    | One note per person.                                           | `person`      |
+| `70-knowledge/` | Evergreen notes and reference — the graph core.                | `note`        |
+| `90-archive/`   | Done, dead, or dormant. Kept so links survive.                 | _(inherited)_ |
+| `templates/`    | Note skeletons.                                                | —             |
 
 Numeric prefixes encode **attention order**, not hierarchy — the folders you touch most sort to the top of any file listing. Renumbering rewrites paths, so treat it as a real change: cheap early, expensive once a hundred notes point at each other.
 
@@ -79,7 +114,7 @@ Minimum viable. Add a field only when a real query or view consumes it; an unuse
 ```yaml
 ---
 title: Human-readable title
-type: project | person | trip | lifestyle | goal | note | inbox
+type: project | person | trip | lifestyle | goal | note | inbox | daily | workboard
 status: active | paused | done | archived
 created: 2026-09-26
 updated: 2026-09-26
@@ -88,6 +123,7 @@ tags: []
 ```
 
 Type-specific additions:
+
 - `project`: `owner`, `due`, `outcome`
 - `person`: `relationship`, `last_contact` (date)
 - `trip`: `start`, `end`, `places` (list)
@@ -109,18 +145,26 @@ Wiki-links are the point of the vault: `[[Note Title]]`, `[[Note Title|display t
 
 ```markdown
 ## Now
+
 - [ ] Ship the plugin #project/pv-personal-kb 📅 2026-09-30
+
 ## Next
+
 - [ ] Book the Kyoto ryokan #travel/japan
+
 ## Waiting
+
 - [ ] Awaiting quote from the builder #people/sam
+
 ## Someday
+
 - [ ] Learn to sail #area/lifestyle
 ```
 
 Rules:
+
 - One line per action. State the action, not the topic.
 - Trailing `#tag` and `📅 YYYY-MM-DD` are the only inline metadata.
 - The source is literal checkboxes, so `grep` works and any editor's task queries work. A Dataview view on top is fine; a Dataview-only workboard is not — the file has to stay readable as text.
 - Completed items are checked, not deleted. `/pkb-review` sweeps them into `## Done — <month>`.
-- Per-project action items may live inside the project note under `## Actions`. The workboard is for what is live *now* — promote, do not duplicate.
+- Per-project action items may live inside the project note under `## Actions`. The workboard is for what is live _now_ — promote, do not duplicate.

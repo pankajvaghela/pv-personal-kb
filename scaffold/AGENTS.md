@@ -21,6 +21,7 @@ If the `pv-personal-kb` plugin is installed, load the `pkb-conventions` skill �
 | Folder | Holds |
 |---|---|
 | `00-inbox/` | Unsorted capture awaiting triage. The default landing zone. |
+| `05-daily/` | One note per day — the start-of-day briefing record. Never triaged. |
 | `10-workboard/` | Action items — what is live right now. |
 | `20-goals/` | Outcomes with a target date. |
 | `30-lifestyle/` | Routines, health, habits, home, money. |
@@ -48,7 +49,7 @@ The numeric prefixes encode attention order, not hierarchy.
 ```yaml
 ---
 title: Human-readable title
-type: project | person | trip | lifestyle | goal | note | inbox
+type: project | person | trip | lifestyle | goal | note | inbox | daily | workboard
 status: active | paused | done | archived
 created: 2026-09-26
 updated: 2026-09-26

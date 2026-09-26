@@ -43,6 +43,7 @@ Set up more than one vault by re-running `/pkb-setup` and pointing it somewhere 
 ├── Home.md              entry note
 ├── .gitignore           ignores editor state, keeps your config
 ├── 00-inbox/            unsorted capture — the default landing zone
+├── 05-daily/            one note per day — the start-of-day briefing record
 ├── 10-workboard/        action items, as literal task lists
 ├── 20-goals/            outcomes with a target date
 ├── 30-lifestyle/        routines, health, habits, home, money
@@ -61,6 +62,7 @@ The numbers are **attention order, not hierarchy**. The folders you touch most s
 | Command | Does |
 |---|---|
 | `/pkb-setup` | Create a vault, or point the plugin at a different one. |
+| `/pkb-morning` | Start-of-day briefing, built from your configured sources. |
 | `/pkb-capture <thing>` | Throw something into the inbox. No decisions, no sorting. |
 | `/pkb-triage` | File inbox items into the right folders — shows a plan first. |
 | `/pkb-workboard` | Show, add, complete, or drop action items. |
@@ -70,6 +72,38 @@ The numbers are **attention order, not hierarchy**. The folders you touch most s
 | `/pkb-commit` | Snapshot the vault to git, with a secret check before staging. |
 
 Plus a `pkb-librarian` agent for bulk work — filing a large backlog, repairing links after a rename, hunting duplicates.
+
+## Sources for the morning briefing
+
+`/pkb-morning` reads from whatever you point it at and reduces it to a short list of action points. Sources live in the config, so adding one is a config edit — not a plugin change:
+
+```json
+{
+  "root": "/Users/you/brain",
+  "name": "Brain",
+  "sources": [
+    { "id": "vault-inbox", "kind": "vault", "label": "Vault inbox", "path": "00-inbox", "enabled": true },
+    { "id": "calendar", "kind": "mcp", "label": "Today's calendar",
+      "tool": "mcp__google-calendar__list_events",
+      "args": { "timeMin": "$TODAY_START", "timeMax": "$TODAY_END" }, "enabled": true },
+    { "id": "notion-inbox", "kind": "mcp", "label": "Notion inbox",
+      "tool": "mcp__notion__search", "args": {}, "enabled": false },
+    { "id": "tasks", "kind": "command", "label": "Google Tasks", "command": "gtsk list --json", "enabled": false }
+  ]
+}
+```
+
+| `kind` | Reads from | Needs |
+|---|---|---|
+| `vault` | A path inside your vault | Nothing — always available |
+| `mcp` | An MCP tool, by name | That MCP server connected |
+| `command` | A shell command's stdout | The command to exist |
+
+`/pkb-morning sources` lists what's configured, tests each one, and reports `ok` / `empty` / `failed` per source — which is also how you add or disable one.
+
+**Sources are read-only, deliberately.** The briefing never marks a Notion row processed, completes a remote task, or sends mail. Writing back would re-create the two-way sync problem this design exists to avoid. When something is handled, you record it in the vault.
+
+Two things worth knowing before you wire up a source. MCP tool names are specific to your install — `/mcp` lists what you actually have, and the plugin will report a missing tool rather than guess at a similar name. And **credentials never go in the vault or the config**: auth belongs to the MCP server, or to the command's own environment.
 
 ## Design choices
 
@@ -92,7 +126,7 @@ Plus a `pkb-librarian` agent for bulk work — filing a large backlog, repairing
 ```yaml
 ---
 title: Human-readable title
-type: project | person | trip | lifestyle | goal | note | inbox
+type: project | person | trip | lifestyle | goal | note | inbox | daily | workboard
 status: active | paused | done | archived
 created: 2026-09-26
 updated: 2026-09-26

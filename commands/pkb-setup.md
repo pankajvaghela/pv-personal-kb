@@ -54,7 +54,7 @@ Two adjustments after copying:
 - **`gitignore` → `.gitignore`.** It is shipped without the leading dot so that git does not read the vault's ignore rules as rules for the plugin repo itself. Rename it in the vault. Verify with `ls -a <path>/.gitignore`.
 - **`workboard.md` → `10-workboard/workboard.md`.** The scaffold keeps it at the top level only for legibility.
 
-Then verify the result with a tree listing and confirm all nine numbered folders plus `templates/` are present. The `.gitkeep` files matter: git cannot track an empty directory, so without them the taxonomy would not survive a clone.
+Then verify the result with a tree listing and confirm all ten numbered folders plus `templates/` are present. The `.gitkeep` files matter: git cannot track an empty directory, so without them the taxonomy would not survive a clone.
 
 ## 5 — Write the config
 
@@ -65,8 +65,19 @@ mkdir -p ~/.config/pv-personal-kb
 Write `~/.config/pv-personal-kb/config.json`:
 
 ```json
-{ "root": "<absolute vault path>", "name": "<display name>" }
+{ "root": "<absolute vault path>", "name": "<display name>", "sources": [] }
 ```
+
+Include the `sources` key with two `vault` entries that need no setup — `00-inbox/` and `10-workboard/workboard.md` — so `/pkb-morning` has something to read on day one:
+
+```json
+"sources": [
+  { "id": "vault-inbox", "kind": "vault", "label": "Vault inbox", "path": "00-inbox", "enabled": true },
+  { "id": "workboard", "kind": "vault", "label": "Workboard", "path": "10-workboard/workboard.md", "enabled": true }
+]
+```
+
+Do not add MCP or command sources here. Those depend on what the user has actually connected, and a guessed tool name fails confusingly later. Mention that `/pkb-morning sources` adds them when they want them.
 
 `chmod 600` it. The config holds no secrets, but it is per-machine state and there is no reason for it to be world-readable.
 
@@ -88,6 +99,7 @@ Give the user, compactly:
 - Config path written.
 - Folder listing, so they can see what they got.
 - **Then:** `/pkb-capture` to start throwing things in, `/pkb-triage` to sort them, `/pkb-workboard` to see what is live.
+- **Tomorrow morning:** `/pkb-morning` builds a briefing from the configured sources. It starts with the vault alone; `/pkb-morning sources` adds a calendar, a task list, or a Notion inbox when the user wants them.
 
 **Mention viewers briefly, as an option — not as a next step.** The vault is a folder of Markdown files, and any editor opens it; it is complete and usable without installing anything. If the user uses Obsidian, two things are worth knowing: *Open folder as vault* → pick the path, and set **Template folder location** to `templates/` in Settings → Files & Links so the Templates plugin substitutes the `{{title}}` and `{{date:YYYY-MM-DD}}` variables. Say this once, then move on.
 
