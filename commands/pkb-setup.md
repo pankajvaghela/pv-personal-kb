@@ -57,6 +57,7 @@ workboard.md               → becomes 10-workboard/workboard.md
 templates/                 → note skeletons
 00-inbox/ … 90-archive/    → the folder taxonomy, with .gitkeep markers
 30-lifestyle/wishlist.md   → an empty wishlist
+30-lifestyle/habits.md     → an empty habits file
 40-travels/travels.md      → an empty travels index
 ```
 

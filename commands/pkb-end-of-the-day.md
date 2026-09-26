@@ -24,7 +24,21 @@ Read `05-daily/YYYY-MM/YYYY-MM-DD.md` if it exists.
 - **Exists** → it holds this morning's briefing. The log is written *against* that briefing: what was on the list, and what actually happened to it.
 - **Missing** → the user skipped `/pkb-morning`. Create the note with today's frontmatter and log into it anyway. Never refuse to close the day because the morning step was skipped.
 
-## 3 — Write the log
+## 3 — Tick the habits
+
+If `<root>/30-lifestyle/habits.md` has anything under `## Active`, close out the `## Habits` section at the end of today's note — after `## Log`. Read `references/habits.md` from the conventions skill first; this step is where its rules actually bite.
+
+**Ask once, as a single list.** Show every active habit and let the user mark them in one pass. Do not interview habit by habit — that is the friction that kills tracking, and it is the whole reason the ticks live in the day rather than in a file of their own.
+
+**Write every active habit, checked or not.** The unchecked ones are the point: a list of only what you did is indistinguishable from a day you never logged, and anything reading the trend has to tell "missed" from "no data" or it will invent regressions that did not happen.
+
+**If the user does not answer, write no section at all.** An all-unchecked day written on their behalf is a fabricated record, and a gap is both more honest and more useful — it reads as unknown, which is what it is. Never infer a tick from the day's activity: gym is not a file change, and the vault has no evidence either way.
+
+Tick a habit only if it is under `## Active`. If the user mentions one that is not, offer to add it with `/pkb-habits add` rather than writing a tick for something undefined.
+
+Running this twice in one day rewrites the section rather than appending a second, like the log.
+
+## 4 — Write the log
 
 Append under `## Log`:
 
@@ -51,7 +65,9 @@ Rules:
 
 **Running this twice in one day must not double the log.** If an `### <date>, evening` entry already exists, rewrite it in place rather than appending a second.
 
-## 4 — Commit and push
+**This command owns `## Log` and `## Habits`, and nothing above them.** The frontmatter and the briefing block belong to `/pkb-morning` — never rewrite or reorder them, and never regenerate the note from its own sections. Each command touching a daily note writes only its own part, which is what makes two writers safe in one file.
+
+## 5 — Commit and push
 
 Use the protocol in `pkb-commit` — stage, secret check, message, commit, push. Follow it exactly rather than inventing a second path; if the two ever drift, the secret check is the part that rots.
 
@@ -60,7 +76,7 @@ Two differences for this command:
 - **The log goes in first.** Write it before staging, so the commit contains it. Committing and then logging leaves the day's record uncommitted, which is the one thing this command was for.
 - **Summarize in day terms**, with the date in the subject: `2026-09-26: shipped the Notion removal, filed 3 notes`.
 
-If `$ARGUMENTS` is `dry`, stop after step 3 and show the message you would write.
+If `$ARGUMENTS` is `dry`, stop after step 4 and show the message you would write.
 
 ## Hard rules
 

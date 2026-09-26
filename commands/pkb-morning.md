@@ -99,9 +99,13 @@ tags: []
 
 Beneath it, the briefing exactly as shown, then an empty `## Log` — that is where the day gets written up later.
 
+**This command owns two things in that file and nothing else: the frontmatter it writes, and the briefing block.** `## Log` and `## Habits` belong to `/pkb-end-of-the-day`. Never rewrite, reorder, clear, reformat, or "tidy" them — and if today's note has already been closed out, refreshing the briefing must leave everything below it exactly as it is.
+
+That is not a nicety. The evening log is committed and cannot be reconstructed from the note, and the `## Habits` ticks are the **only** record of that day's habits — so a write step that regenerates the file from the briefing would silently destroy both, and the habit damage would be invisible, showing up months later as a gap that reads as a day you failed. Touch your own sections and stop.
+
 **b. The workboard** — append the confirmed items under `## Now` in `10-workboard/workboard.md`, with `📅 YYYY-MM-DD` when the item carries a date.
 
-**Running this twice on the same day must not duplicate anything.** If `05-daily/YYYY-MM/<today>.md` exists, update it in place rather than writing a second copy. Before adding a workboard line, check for an existing line with the same text and skip it.
+**Running this twice on the same day must not duplicate anything.** If `05-daily/YYYY-MM/<today>.md` exists, update the briefing in place rather than writing a second copy — and leave `## Log` and `## Habits` untouched, however far the day has already got. Before adding a workboard line, check for an existing line with the same text and skip it.
 
 ## 6 — Report
 

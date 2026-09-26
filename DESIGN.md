@@ -14,7 +14,7 @@ The conventions skill (`skills/pkb-conventions/SKILL.md`) is the third piece: it
 
 **The folders are the schema.** Structure goes in the directory tree, not in frontmatter. A field that no query consumes is a small lie you have to keep maintaining, and unused fields rot into wrong ones. The taxonomy is closed: a new top-level folder gets proposed, never created silently.
 
-**One note = one topic.** Filenames are wiki-link targets, so a rename breaks every inbound link. Renames are allowed, but the conventions require repairing inbound links in the same pass.
+**One note = one topic.** Filenames are wiki-link targets, so a rename breaks every inbound link. Renames are allowed, but the conventions require repairing inbound links in the same pass — which is why `/pkb-rename` exists rather than leaving that as a sentence to remember. See below.
 
 **Capture and sorting are separate acts.** `/pkb-capture` never asks a question — the moment capture costs a decision, you stop capturing. `/pkb-triage` is where the judgment happens, and it proposes before it moves anything.
 
@@ -23,6 +23,46 @@ The conventions skill (`skills/pkb-conventions/SKILL.md`) is the third piece: it
 **Wiki-links, and why.** `[[Note Title]]` isn't CommonMark, so GitHub shows it as literal text. It's still the right default for two reasons: it's the shared convention across file-based PKM tools, and it needs only the note's *filename* rather than a relative path — which matters a lot when an AI is writing the link, since a guessed relative path fails silently while a filename is either right or obviously missing. Switching to `[Note](Note.md)` is a mechanical conversion if you'd rather have GitHub-native rendering; decide while the vault is small.
 
 **Templates are the one place the scaffold speaks Obsidian.** `{{title}}` and `{{date:YYYY-MM-DD}}` are Obsidian Templates syntax, kept because it's what makes that plugin useful. It's a deliberate exception, not a precedent — Claude substitutes those variables itself, so a note created by a command is correct with or without Obsidian installed.
+
+## The instance's conventions win
+
+Everything this plugin ships is a **default**. A vault is allowed to amend it, the amendment is recorded in `<root>/AGENTS.md` under `## Local conventions`, and **where the two disagree, the vault wins.**
+
+This is the missing half of an existing rule. The conventions already said to never invent a top-level folder — to propose it instead — but they never said where an accepted proposal goes. Without that, an exception lives in the user's memory, and the next session either re-proposes it or, worse, sees a vault that violates the shipped conventions and "fixes" it back. A structure that is deliberate and undocumented is indistinguishable from a mistake, and every tool reading the vault will treat it as one.
+
+So a vault may allow project subfolders, add a grouping level under `20-goals/`, keep a folder this plugin has never heard of, or add a `type` value. `AGENTS.md` is where that is written down, and it is authoritative for the vault it sits in — the skill and the commands ship the defaults, `AGENTS.md` holds the local law.
+
+The consequence lands hardest on `/pkb-doctor`, because doctor's entire job is deciding what counts as a problem. A linter that checks a vault against a specification the vault has explicitly amended does not produce findings; it produces noise, and noise is what teaches someone to stop reading the report. Doctor therefore reads the local conventions first and lints against the **effective** rules. A structure `AGENTS.md` permits is correct by definition.
+
+There is one constraint, and it is the reason this works at all: **an amendment cannot be silent.** The whole value is that the exception is written where every reader will find it, so it stops being an exception and becomes the convention.
+
+## A rename is one change, not two
+
+Wiki-links are matched on **filename**, which is what makes them robust — no relative paths to get wrong — and it is also what makes a rename dangerous in a specific way.
+
+A broken link in this vault does not look broken. A link to a note that has not been written yet is a normal, deliberate thing here; the conventions say to link liberally to notes that do not exist. So a rename that fails to repair its inbound links produces notes that look exactly like notes that are working: the link renders as literal text in a plain editor, and in a wiki-link-aware one it renders in whatever styling the tool uses for unresolved targets — which is the same styling as a marker you wrote on purpose. There is nothing to notice.
+
+That is the argument for a command rather than a convention. The rule was always correct and always stated, and a rule that depends on remembering to do a second thing in the same pass as the first will eventually be done halfway — and done halfway here means a vault that is quietly full of dead pointers, discovered months later. `/pkb-rename` makes the two halves one operation: find the note, refuse the destination if it is occupied, show the inbound links before touching anything, then move the file, correct the title, and rewrite every link form in a single pass.
+
+Two details generalize. **The destination check is not paranoia.** Renaming onto an existing note destroys one of them, and on a filesystem that is a `mv` that reads as a success. And **the preview before the write** follows the same rule as bulk triage: when one action touches many files, being wrong is expensive and slow to undo, so the plan is shown first and the operation is confirmed before it happens.
+
+A rename also corrects `title` to match the new filename, because that agreement is load-bearing elsewhere — the travels index links trips by their `title` field, so a note whose title and filename disagree produces an index row pointing nowhere. `/pkb-doctor` checks that agreement across the whole vault, which is the other half of the same coin.
+
+## The vault checks itself
+
+`/pkb-doctor` is a linter, not a review, and the distinction is the design.
+
+`/pkb-review` is weekly and behavioural. It asks what is stale, what needs a decision, what has been avoided — questions whose answers are judgments, and whose value comes from being asked on a rhythm. Doctor asks something narrower and answerable: **is the vault internally consistent?** Titles against filenames, frontmatter against the schema, links against what exists, folders against the taxonomy. Every finding is a fact you can verify, which is why it is run on demand rather than on a schedule, and why a clean run is a success rather than a quiet week.
+
+Three stances make it safe to run on a vault full of personal notes.
+
+**It reports; it does not tidy.** The default is read-only, and `fix` is deliberately short — quoting a `title` that breaks YAML, and filling a missing `updated` from `created`. That is the entire automatic list, because those are the only two repairs with exactly one correct answer. Everything else is offered one at a time and never in a batch: a wall of proposed changes is one that gets approved without being read, which is the same reasoning that has `/pkb-triage` propose before it moves anything.
+
+**It splits broken links, because most broken links are not broken.** A link to a note that has not been written yet is a marker in this vault, and reporting forty of them as errors would train you to ignore the report. The actionable list is the near-misses — a target within an edit of an existing note — and that is the only part presented as something to fix. Everywhere else, the answer is "write the note", and only the user knows which case they are looking at.
+
+**It never deletes, never merges, and never guesses a date.** Duplicate notes are reported as candidates, not resolved. A stray file is named, not filed. An ambiguous `03/04/2026` is a finding, not a value.
+
+One check is there because it was previously too late. Doctor reads the committed `.pkb/config.json` for a literal credential using the same value-level test `/pkb-commit` runs — but it runs it *before* anything is staged, rather than at the commit that would have published it.
 
 ## The daily loop
 
@@ -33,6 +73,8 @@ The morning command reads your sources and writes a briefing into `05-daily/YYYY
 That loop is why the log is written *against* the morning list rather than as a free-form diary. If something was on the list and didn't happen, the evening entry says so — and if the same item shows up carried for the third day running, the next morning calls that out instead of listing it a fourth time as if it were new.
 
 Two details make it hold up in practice. The evening command reads `git log --since=midnight` **as well as** `git status`, because after any mid-day commit a status-only check would report a quiet day — the changes exist, they're just not in the working tree. And a day where nothing happened produces a short log, not a padded one.
+
+**Two commands write one file, so the file is split by ownership.** Morning owns the frontmatter and the briefing block; the evening owns `## Log` and `## Habits`. Neither rewrites or regenerates the other's part, which is the only reason either can be re-run safely at any point in the day. It is a small rule with an outsized failure mode: both sections are unreconstructable, and a morning re-run on a day already closed out would have regenerated the note from its briefing — taking the evening's log with it, and taking that day's habit ticks with it. The log would at least have been missed. The ticks would not: they would surface months later as a gap reading as a missed day, which is exactly the false signal the gap-versus-miss rule exists to prevent.
 
 Daily notes live in `05-daily/` rather than `00-inbox/` deliberately. A log has a different lifecycle from capture, and `/pkb-triage` should not try to file yesterday's briefing.
 
@@ -94,6 +136,18 @@ No pressure, deliberately. A dream is on the list because it's true about you, n
 
 The review pressure across the three tiers is **deliberately uneven**, and that's the part to protect from well-meaning improvement: ignoring a wish is information about you, ignoring a seed or a dream means nothing. A command that nags about the latter turns something pleasurable into a debt.
 
+## Habits are the one thing that never completes
+
+The vault had two shapes for "something you intend to do". An **action** completes — it is done or it is not, and the workboard holds it. A **goal** arrives — it has a target and then it is reached. Habits are the third shape, and the vault did not have it: a habit neither completes nor arrives. It is either being kept or it is not, and it is never finished. `30-lifestyle/habits.md` holds the definitions for exactly that reason — putting "gym" on the workboard means a line that can never be checked off, and a list of things that can never be checked off is a list you stop reading.
+
+**The ticks live in the daily note, and that decision is the whole feature.** The obvious alternative — a habits file with one row per day — fails on friction: it is a second place to update every day, separate from everything else you already do, and a tracking system that requires its own ritual is one that survives about three weeks. The daily note already exists and `/pkb-end-of-the-day` already writes it, so the tick costs nothing extra. The objection that answering "has gym slipped?" now means reading weeks of daily notes is not a real cost — that is a grep across a month folder, which is what this vault is for.
+
+**A gap is not a miss, and this is the rule that decides whether any of it is trustworthy.** A day with no `## Habits` section is *unknown*; a day with the section and an unchecked box is a *miss*. Collapse the two and you get regressions that never happened, which is the fastest possible route to ignoring the report and then abandoning the tracking. It is the same distinction as *a source that fails is not a source that is empty*, and it forces one behaviour: if the user does not answer the evening prompt, **nothing is written**. An all-unchecked day invented on their behalf would be a fabricated record, and a gap is both more honest and more useful.
+
+**No streak is ever stored.** Same rule as the wishlist's totals and the travels index's rows — a thing that can be derived is not stored — and it is sharper here, because a streak turns the number into the thing being maintained. Worse, a stored streak is simply wrong the moment a day is missed, which is precisely when someone would be tempted to correct it by hand.
+
+**And the report has to be able to say "drop it".** A habit that is consistently missed is often the wrong habit — too ambitious, badly defined, or no longer wanted — so every flag ends in a question whose answers include changing the cadence and abandoning it. A report whose only available verdict is *you failed* becomes a wall of failure, gets skipped, and takes the tracking with it. That is the same reasoning that keeps `## Dreams` from ever reporting an untouched item as overdue: review pressure is a tool, and applied where it cannot help it destroys the thing it was aimed at.
+
 ## Indexes are generated, not curated
 
 `40-travels/travels.md` is the one file in the vault that is a table, and it exists because a trip folder is the one place where you want the whole set at a glance. It's built from the frontmatter of the trip notes next to it.
@@ -135,3 +189,25 @@ Which means **the vault config is committed, so no credential ever goes in it.**
 The plugin's commands update through `claude plugin update`. The vault's folders and scaffold files do not — `/pkb-setup` copies them once and nothing links the copy back.
 
 That's why `/pkb-upgrade` exists, and why it is **additive only**: it creates folders that are new and copies scaffold files that are missing, shows a diff rather than overwriting anything that differs, and never deletes or renames. A vault is meant to be a folder of files you own, and silently rewriting them on every plugin update is the wrong behaviour for personal notes. It touches structure and scaffold files only — **never a note**, not one line.
+
+## The conventions skill is split by when you need it
+
+The skill began as one file and grew to 28 KB. Every command loads it — which meant `/pkb-capture`, a command whose entire job is to append one bullet without asking a question, was loading the wishlist's cooling-off periods, the travels table's column rules, and the workboard's tag syntax along with the twenty lines it actually needed.
+
+**Context is a budget, and a skill that is always loaded should hold only what is always true.** The core `SKILL.md` is now 7.9 KB — 72% below where it started — and it got there in two passes that cut along different lines.
+
+The first was **by area**. The core keeps what every task touches: resolving the vault root, the folder taxonomy, the frontmatter schema, the link forms, the hard rules. Reference files hold what only some tasks touch — desire, habits, travels, workboard, daily notes, sources — each read only when the task is in it.
+
+The second was **by kind**, and it is the more interesting cut. What remained in core was correct but twice the size it needed to be, because it carried its own justification. "What this vault depends on" is a table of what is required against what is optional, with a paragraph explaining what each option costs. Why wiki-links are chosen over relative paths. Why the template variables are the one place Obsidian syntax is allowed. All of it is worth reading once and none of it is worth loading on every message.
+
+So the rule that settled the second pass: **core holds what a task must do; a reference holds why it is done that way.** The instruction stays — link with `[[Note Title]]`, keep templates free of identity fields, prefer plain Markdown where it costs nothing — and the argument for it moves to `references/format.md`. An agent following the core still does the right thing; it simply stops paying for the reasoning every time, and reads it when it is actually choosing between two features or editing a template.
+
+The risk in both passes is the same, and it is the one to watch: **content that moves out of core stops being seen by default.** A reference nobody knows to open is worse than a verbose core, because the material becomes invisible rather than merely expensive. That is why the reference table names the *trigger* for each file rather than its topic, and why the most load-bearing material — the taxonomy, the hard rules, the precedence of the vault's own conventions — deliberately stayed in core even where it could have been compressed further.
+
+Two properties make the split hold rather than quietly rot.
+
+**A reference nobody knows to open is worse than no split**, because the content becomes invisible rather than merely verbose. So `SKILL.md` does not list its references as a table of contents — it names the *trigger* for each one: read `references/travels.md` when the task touches a trip or the index, `references/sources.md` when a task reads from outside the vault. The reader is told when, not just what.
+
+**The conflict rule is written down.** Where a reference and the core disagree, the reference is the more specific statement and wins for its own area. Without that line, a split document develops two answers to one question and the reader has to guess which is current.
+
+Nothing was dropped in the move, and the organizing principle is the one the vault already uses everywhere else: one fact, one home, and the home is wherever it is actually needed.

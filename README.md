@@ -45,13 +45,16 @@ It asks where the vault should live and what to call it, scaffolds the folders, 
 | `/pkb-wishlist` | Show, add to, or resolve the wishlist. |
 | `/pkb-curious` | Note something you want to know about — a seed note. |
 | `/pkb-dreams` | Things you want to do in your life. |
+| `/pkb-habits` | Standing habits — define them, tick them, see whether any are slipping. |
 | `/pkb-travels` | Travels index — every trip as a table, generated from the trip notes. |
 | `/pkb-new-project <name>` | Start a project note from the template. |
 | `/pkb-new-person <name>` | Create or update a person note — searches for a duplicate first. |
+| `/pkb-rename <note> → <title>` | Rename a note and repair every inbound wiki-link in the same pass. |
+| `/pkb-doctor` | Check the vault's internal consistency — title/filename agreement, frontmatter, broken links, duplicates. `fix` applies the mechanical repairs only. |
 | `/pkb-review` | Weekly sweep: inbox, workboard, wishlist, dreams, travels, stale projects, orphan notes, broken links. |
 | `/pkb-commit` | Snapshot the vault to git, with a secret check before staging. |
 
-Plus a `pkb-librarian` agent for bulk work — filing a large backlog, repairing links after a rename, hunting duplicates.
+Plus a `pkb-librarian` agent for bulk work — filing a large backlog, classifying an unsorted pile, hunting near-duplicates across folders.
 
 ## What you get
 
@@ -62,10 +65,10 @@ Plus a `pkb-librarian` agent for bulk work — filing a large backlog, repairing
 ├── .gitignore           ignores editor state, keeps your config
 ├── .pkb/                config.json (yours, committed) + version (written by setup)
 ├── 00-inbox/            unsorted capture — the default landing zone
-├── 05-daily/            one note per day, filed under YYYY-MM/
+├── 05-daily/            one note per day, filed under YYYY-MM/ — briefing, log, habit ticks
 ├── 10-workboard/        action items, as literal task lists
 ├── 20-goals/            outcomes, with a target date or horizon: life
-├── 30-lifestyle/        routines, health, habits, home, money — and wishlist.md
+├── 30-lifestyle/        routines, health, habits, home, money — wishlist.md and habits.md
 ├── 40-travels/          trips, itineraries, places — and travels.md, the index
 ├── 50-projects/         time-bound efforts, one folder each
 ├── 60-people/           one note per person
