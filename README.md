@@ -4,9 +4,7 @@ A Claude Code plugin that sets up and runs a personal knowledge base as a **plai
 
 No database, no server, no sync service. Your notes are `.md` files with YAML frontmatter that you can grep in a terminal, diff in git, and still open in ten years. Claude gets commands for the things that are annoying to do by hand — capturing without ceremony, filing an inbox, keeping a workboard honest — and a conventions skill so it files things the same way every time instead of inventing a structure.
 
-## Markdown is the format. Everything else is a view of it.
-
-The vault is a directory of text files. **Nothing here requires Obsidian** — no command reads or writes Obsidian state, and the plugin never touches `.obsidian/`. Open it in whatever you like: Obsidian, VS Code, iA Writer, GitHub, `less`.
+**Nothing here requires Obsidian.** No command reads or writes editor state. Open the vault in whatever you like: Obsidian, VS Code, iA Writer, GitHub, `less`.
 
 | | |
 |---|---|
@@ -14,9 +12,9 @@ The vault is a directory of text files. **Nothing here requires Obsidian** — n
 | **Pick any** | A Markdown viewer. Obsidian is a good one — it renders the wiki-links and draws the graph — but it's one option, not a requirement. |
 | **App-specific, optional** | Dataview, callouts, embeds, the `📅` task marker |
 
-Two honest caveats, both in the conventions skill: `[[wiki-links]]` are not CommonMark, so GitHub shows them as literal text — though Foam, Logseq, Dendron, and Quartz all read them. And the `📅` date marker on workboard lines is an Obsidian Tasks convention that means nothing elsewhere, which is why the date is always also readable as plain text.
+Two honest caveats: `[[wiki-links]]` are not CommonMark, so GitHub shows them as literal text — though Foam, Logseq, Dendron, and Quartz all read them. And the `📅` date marker on workboard lines is an Obsidian Tasks convention that means nothing elsewhere, which is why the date is always also readable as plain text.
 
-Templates use Obsidian's `{{title}}` and `{{date:YYYY-MM-DD}}` variables. That is the one place the scaffold speaks Obsidian — a deliberate convenience for the Templates plugin. Claude substitutes those variables itself, so `/pkb-new-project` and `/pkb-new-person` produce correct notes with or without Obsidian installed.
+**Why it works this way is in [DESIGN.md](DESIGN.md).** This file is the reference.
 
 ## Install
 
@@ -31,77 +29,7 @@ Then, in any session:
 /pkb-setup
 ```
 
-It asks where the vault should live and what to call it, scaffolds the folders, and writes two config files. You can put the vault anywhere — the plugin reads the path from config and never hardcodes one.
-
-Set up more than one vault by re-running `/pkb-setup` and pointing it somewhere else.
-
-## Two config files, split by what belongs in git
-
-| | |
-|---|---|
-| **`~/.config/pv-personal-kb/config.json`** | Machine-local, never committed. Two jobs only: the vault's path, so it can be found from anywhere, and secrets. |
-| **`<vault>/.pkb/config.json`** | In the vault, committed, travels with it. Everything else — the vault's name, and its sources. |
-
-```jsonc
-// ~/.config/pv-personal-kb/config.json — this machine only
-{
-  "root": "/Users/you/brain",
-  "secrets": { "gtsk_token": "..." }
-}
-
-// <vault>/.pkb/config.json — committed with the vault
-{
-  "name": "Brain",
-  "sources": [ /* ... */ ]
-}
-```
-
-The split is the point. Configuration that *describes the vault* belongs with the vault, so it's versioned, diffable, and survives moving to another machine — clone the repo, set one path, and the vault is itself again. Only the two things that genuinely can't live there are kept out: the path that finds the vault when you're not standing in it, and secrets.
-
-**Which means the vault config is committed, so no credential ever goes in it.** A source that needs auth references it as `$SECRET:<key>`, and the value lives in the machine config.
-
-## Updating
-
-Two things update, and only one of them does it by itself.
-
-**The plugin** — commands, skill, agent:
-
-```bash
-claude plugin update pv-personal-kb@pankajvaghela
-```
-
-**The vault** — the folders and scaffold files that `/pkb-setup` copied in. Those are a one-time snapshot, and nothing updates them on its own:
-
-```
-/pkb-upgrade
-```
-
-It compares the vault against the installed plugin: creates folders that are new, copies scaffold files that are missing, and **shows you a diff for any that differ rather than overwriting your edits**. `CHANGELOG.md` records which versions changed structure, and `/pkb-upgrade check` reports without changing anything.
-
-The split is deliberate. A vault is meant to be a folder of files you own, and silently rewriting them on every plugin update is the wrong behaviour for personal notes. An upgrade touches structure and scaffold files only — **never a note**, not one line, and it never deletes or renames anything.
-
-## What you get
-
-```
-<your vault>/
-├── AGENTS.md            conventions, for any AI or editor working in the vault
-├── Home.md              entry note
-├── .gitignore           ignores editor state, keeps your config
-├── .pkb/                config.json (yours, committed) + version (written by setup)
-├── 00-inbox/            unsorted capture — the default landing zone
-├── 05-daily/            one note per day, filed under YYYY-MM/
-├── 10-workboard/        action items, as literal task lists
-├── 20-goals/            outcomes with a target date
-├── 30-lifestyle/        routines, health, habits, home, money — and wishlist.md
-├── 40-travels/          trips, itineraries, places
-├── 50-projects/         time-bound efforts, one folder each
-├── 60-people/           one note per person
-├── 70-knowledge/        evergreen notes and reference
-├── 90-archive/          done, dead, dormant — kept so links survive
-└── templates/           note skeletons
-```
-
-The numbers are **attention order, not hierarchy**. The folders you touch most sort to the top of any file listing.
+It asks where the vault should live and what to call it, scaffolds the folders, and writes two config files. You can put the vault anywhere — the plugin reads the path from config and never hardcodes one. Set up more than one vault by re-running `/pkb-setup` and pointing it somewhere else.
 
 ## Commands
 
@@ -114,46 +42,73 @@ The numbers are **attention order, not hierarchy**. The folders you touch most s
 | `/pkb-capture <thing>` | Throw something into the inbox. No decisions, no sorting. |
 | `/pkb-triage` | File inbox items into the right folders — shows a plan first. |
 | `/pkb-workboard` | Show, add, complete, or drop action items. |
-| `/pkb-wishlist` | Show, add to, or resolve the wishlist — the inbox for desire. |
-| `/pkb-curious` | Note something you want to know about — a seed note, no deadline. |
-| `/pkb-dreams` | Dreams — things you want to do in your life. |
+| `/pkb-wishlist` | Show, add to, or resolve the wishlist. |
+| `/pkb-curious` | Note something you want to know about — a seed note. |
+| `/pkb-dreams` | Things you want to do in your life. |
 | `/pkb-new-project <name>` | Start a project note from the template. |
 | `/pkb-new-person <name>` | Create or update a person note — searches for a duplicate first. |
-| `/pkb-review` | Weekly sweep: inbox count, stale projects, orphan notes, broken links. |
+| `/pkb-review` | Weekly sweep: inbox, workboard, wishlist, stale projects, orphan notes, broken links. |
 | `/pkb-commit` | Snapshot the vault to git, with a secret check before staging. |
 
 Plus a `pkb-librarian` agent for bulk work — filing a large backlog, repairing links after a rename, hunting duplicates.
 
-## The daily loop
+## What you get
 
-`/pkb-morning` and `/pkb-end-of-the-day` are two halves of one thing, and neither is much use alone.
+```
+<your vault>/
+├── AGENTS.md            conventions, for any AI or editor working in the vault
+├── Home.md              entry note
+├── .gitignore           ignores editor state, keeps your config
+├── .pkb/                config.json (yours, committed) + version (written by setup)
+├── 00-inbox/            unsorted capture — the default landing zone
+├── 05-daily/            one note per day, filed under YYYY-MM/
+├── 10-workboard/        action items, as literal task lists
+├── 20-goals/            outcomes, with a target date or horizon: life
+├── 30-lifestyle/        routines, health, habits, home, money — and wishlist.md
+├── 40-travels/          trips, itineraries, places
+├── 50-projects/         time-bound efforts, one folder each
+├── 60-people/           one note per person
+├── 70-knowledge/        evergreen notes and reference — including seeds
+├── 90-archive/          done, dead, dormant — kept so links survive
+└── templates/           note skeletons
+```
 
-The morning command reads your sources and writes a briefing into `05-daily/YYYY-MM/YYYY-MM-DD.md` — what's fixed, what's carried, what it proposes. The evening command reads the git history and the day's note, writes a log underneath that briefing, and commits. The seam is **`## Carried to tomorrow`**: the evening writes it, the next morning reads it.
+The numbers are **attention order, not hierarchy**. The folders you touch most sort to the top of any file listing.
 
-That loop is why the log is written *against* the morning list rather than as a free-form diary. If something was on the list and didn't happen, the evening entry says so — and if the same item shows up carried for the third day running, the next morning calls that out instead of listing it a fourth time as if it were new.
+## Config
 
-Two details that make it hold up in practice. The evening command reads `git log --since=midnight` **as well as** `git status`, because after any mid-day commit a status-only check would report a quiet day — the changes exist, just not in the working tree. And a day where nothing happened produces a short log, not a padded one.
+Two files, split by what belongs in git:
 
-## Sources for the morning briefing
-
-`/pkb-morning` reads from whatever you point it at and reduces it to a short list of action points. Sources live in the vault's own config, so adding one is a config edit — committed with the vault, not stranded on one machine:
+| | Holds | Committed |
+|---|---|---|
+| `~/.config/pv-personal-kb/config.json` | `root` — the vault's path — and `secrets` | never |
+| `<vault>/.pkb/config.json` | `name` and `sources` | yes, with the vault |
 
 ```jsonc
-// <vault>/.pkb/config.json
+// ~/.config/pv-personal-kb/config.json — this machine only
+{
+  "root": "/Users/you/brain",
+  "secrets": { "gtsk_token": "..." }
+}
+
+// <vault>/.pkb/config.json — committed with the vault
 {
   "name": "Brain",
   "sources": [
     { "id": "vault-inbox", "kind": "vault", "label": "Vault inbox", "path": "00-inbox", "enabled": true },
+    { "id": "workboard", "kind": "vault", "label": "Workboard", "path": "10-workboard/workboard.md", "enabled": true },
     { "id": "calendar", "kind": "mcp", "label": "Today's calendar",
       "tool": "mcp__google-calendar__list_events",
       "args": { "timeMin": "$TODAY_START", "timeMax": "$TODAY_END" }, "enabled": true },
-    { "id": "notion-inbox", "kind": "mcp", "label": "Notion inbox",
-      "tool": "mcp__notion__search", "args": {}, "enabled": false },
     { "id": "tasks", "kind": "command", "label": "Google Tasks", "command": "gtsk list --json",
       "env": { "GTSK_TOKEN": "$SECRET:gtsk_token" }, "enabled": false }
   ]
 }
 ```
+
+`$PKB_ROOT` overrides `root` if set. Nothing writes to a source — see [DESIGN.md](DESIGN.md#sources-are-read-only).
+
+### Source kinds
 
 | `kind` | Reads from | Needs |
 |---|---|---|
@@ -161,79 +116,37 @@ Two details that make it hold up in practice. The evening command reads `git log
 | `mcp` | An MCP tool, by name | That MCP server connected |
 | `command` | A shell command's stdout | The command to exist |
 
+`mcp` tool names are specific to your install — `/mcp` lists what you actually have, and the plugin reports a missing tool rather than guessing at a similar name.
+
+Substitutions available in `args` and `command`: `$TODAY`, `$NOW`, `$TODAY_START`, `$TODAY_END`, `$VAULT`. `$SECRET:<key>` appears only in an `env` map and resolves from the machine-local `secrets`.
+
+**Credentials never go in the vault config — it is committed.** An `mcp` source's auth belongs to the MCP server; a `command` source takes `$SECRET:<key>` and the value lives in `~/.config/pv-personal-kb/config.json`. `/pkb-commit` checks for this at the value level, not just by filename.
+
 `/pkb-morning sources` lists what's configured, tests each one, and reports `ok` / `empty` / `failed` per source — which is also how you add or disable one.
 
-**Sources are read-only, deliberately.** The briefing never marks a Notion row processed, completes a remote task, or sends mail. Writing back would re-create the two-way sync problem this design exists to avoid. When something is handled, you record it in the vault.
+## Updating
 
-Two things worth knowing before you wire up a source. MCP tool names are specific to your install — `/mcp` lists what you actually have, and the plugin will report a missing tool rather than guess at a similar name. And **credentials never go in the vault**: an `mcp` source's auth belongs to the MCP server, and a `command` source takes `$SECRET:<key>` in its `env`, which resolves from the machine-local config. `/pkb-commit` checks for this specifically, since the vault config is committed.
+**The plugin:**
 
-## The wishlist
+```bash
+claude plugin update pv-personal-kb@pankajvaghela
+```
 
-`30-lifestyle/wishlist.md` is **an inbox for desire** — a single file, one line per wish, held until it's clear what to do with it. It's an inbox, but not one you clear in a sitting. Every other inbox in this vault is processed as fast as possible; this one is processed *slowly, on purpose*, because desire isn't legible on the day you feel it.
+**The vault** — the folders and scaffold files `/pkb-setup` copied in are a one-time snapshot, and nothing updates them on its own:
 
-Wishlists don't fail at storing things — storing is free. They fail because nothing ever forces a decision, so the list only grows and eventually stops being read. Three rules do the work:
+```
+/pkb-upgrade
+```
 
-**Capture asks nothing.** Same as `/pkb-capture` — the judgment happens at review. A wishlist entry that costs a question to write is one that never gets written, so `add` takes whatever you say and defaults the rest.
-
-**Desire is tested by waiting, not recorded.** "How much do I want this?" answered at the moment of wanting is just the impulse talking — which is why high/medium/low priority collapses within a week. Time is the honest measure, so every wish gets a cooling-off period derived from its cost: 7 days under $100, 14 days to $500, 30 days above. Anything with no cost — a place, a skill, a thing to do — gets 30 days, because money is capped and time isn't.
-
-**Importance exempts you from the wait.** A mattress you need but don't want will never clear a cooling-off period with any enthusiasm. Those go under `## Needed` and have no hold at all.
-
-So the file is organized by readiness, not by category, and the review is what makes it real: `/pkb-wishlist review` forces **promote, extend, drop, or buy** on everything off hold, and flags anything off hold for 60+ days as a decision being avoided rather than a pending purchase. `/pkb-review` sweeps it weekly, which is the only thing that guarantees anyone looks at it.
-
-A wish leaves by being **acted on**, which usually means it's become legible enough to promote — into a goal, a project, a trip, or a workboard line. Promotion is the primary exit and the one to steer toward: a wish that has been promoted has done its job. Nothing leaves by being ignored, which is what keeps it from becoming a graveyard. Dropped wishes stay in the file, checked, so you stop re-adding the same thing every few months.
-
-### Seeds — the low-consequence ones
-
-Not everything you want is a wish. "Jan Schoonhoven relief" isn't something to buy or do; it's something to *know about*. Those end in knowing rather than in an act, and they need none of the machinery above — no cost, no hold, no review pressure.
-
-They're **seed notes** in `70-knowledge/` with `status: seed`: a stub that exists so the learning has somewhere to land and so it can be linked to from a gallery visit, a project, or a wish to buy a print. A line in a list can be linked from nowhere, which is the whole reason this vault uses wiki-links.
-
-The dividing line is **what the thing ends in**. Ends in an act — buy it, go there, do it — → wishlist. Ends in knowing → seed.
-
-A seed has no urgency and must never acquire any: no due date, no count that should trend to zero. A seed you haven't gotten to isn't a failure and a list of forty isn't a problem. The moment seeds get treated as a backlog they stop being curiosities and start being guilt — which is why `/pkb-review`'s orphan-notes section explicitly skips them. `/pkb-curious` creates one, `list`s them, and `open`s one when you finally dig in.
-
-### Dreams
-
-Third tier, same treatment. `## Dreams` is the last section of the same wishlist file: things you want to do in your life. `Skydive`, `See the Northern Lights`, `Learn to sail`.
-
-**Dreams are what you want your life to have in it; wishes are what you want next.** Both are wants and both are one line — the difference is time horizon, not weight. A dream isn't a goal or a project; "skydive" needs no research plan, and turning every dream into a project is how a dream list stops being a pleasure.
-
-The wording is deliberate throughout: it's *dreams* and *things you want to do in your life*, never "bucket list" — that phrase comes from "kick the bucket". This section is about living, not about mortality, and a list that reads as an invitation gets used where one that reads as a deadline gets avoided.
-
-No pressure, and that's the point. A dream is on the list because it's true about you, not because it's due — it's allowed to wait years. `/pkb-review` surfaces only the ones that have *started to move*, and never reports an untouched one as overdue. When a dream gets real — a date forming, money to save, a skill to build first — `/pkb-dreams pursue` promotes it to a goal note in `20-goals/` where `## Leading actions` and `## Progress` can hold the working-out. It hasn't stopped being a dream; it's acquired somewhere to be worked on.
-
-The three tiers together:
-
-| | Lives as | Review pressure |
-|---|---|---|
-| Curiosity — ends in knowing | `70-knowledge/` seed | none, ever |
-| Wish — ends in an act, months out | `30-lifestyle/wishlist.md` line | forced at hold expiry |
-| Dream — ends in an act, life-scale | `30-lifestyle/wishlist.md` line, `## Dreams` | none, but momentum gets surfaced |
-
-## Design choices
-
-**Local files are the source of truth.** There is no mirror and no sync, because a sync is a second place for the truth to live, and reconciling two truths is the expensive part. If you want your notes on another device, that is what git is for.
-
-**Never delete, archive.** `90-archive/` is what makes this affordable — a dead project keeps its inbound links, and the vault stays navigable.
-
-**The folders are the schema.** Structure goes in the directory tree, not in frontmatter. A field that no query consumes is a small lie you have to keep maintaining.
-
-**One note = one topic.** Filenames are wiki-link targets, so a rename breaks every inbound link. The conventions require repairing links in the same pass.
-
-**Capture and sorting are separate acts.** `/pkb-capture` never asks a question. `/pkb-triage` is where the judgment happens, and it proposes before it moves anything.
-
-**The workboard is literal checkboxes.** Readable and editable as plain text on a phone, in a terminal, in any editor. A Dataview view on top is fine; a Dataview-only workboard is not.
-
-**Wiki-links, and why.** `[[Note Title]]` isn't CommonMark, so GitHub shows it as literal text. It's still the right default: it's the shared convention across file-based PKM tools, and it needs only the note's *filename* rather than a relative path — which matters a lot when an AI is writing the link, since a guessed path fails silently and a filename is either right or obviously missing. Switching to `[Note](Note.md)` is a mechanical conversion if you'd rather have GitHub-native rendering; decide while the vault is small.
+It creates folders that are new, copies scaffold files that are missing, and **shows a diff for any that differ rather than overwriting your edits**. `CHANGELOG.md` records which versions changed structure, and `/pkb-upgrade check` reports without changing anything.
 
 ## Frontmatter
 
 ```yaml
 ---
 title: Human-readable title
-type: project | person | trip | lifestyle | goal | note | inbox | daily | workboard
-status: active | paused | done | archived
+type: project | person | trip | lifestyle | goal | note | inbox | daily | workboard | wishlist
+status: active | seed | paused | done | archived
 created: 2026-09-26
 updated: 2026-09-26
 tags: []
@@ -241,6 +154,8 @@ tags: []
 ```
 
 Dates are ISO-8601, always. `created` is never rewritten; `updated` changes whenever the note does.
+
+Type-specific fields: `project` → `owner`, `due`, `outcome`. `person` → `relationship`, `last_contact`. `trip` → `start`, `end`, `places`. `goal` → `target`, `horizon` (`life` | `year` | `quarter` | `season`).
 
 ## If you happen to use Obsidian
 
@@ -250,7 +165,7 @@ To let the Templates plugin fill templates in for you, set **Template folder loc
 
 ## Requirements
 
-Claude Code. That's it. `git` is only needed for `/pkb-commit`, and Obsidian is just one of many ways to look at the result.
+Claude Code. That's it. `git` is only needed for `/pkb-commit` and `/pkb-end-of-the-day`, and Obsidian is just one of many ways to look at the result.
 
 ## License
 

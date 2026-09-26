@@ -7,6 +7,12 @@ Two kinds of change live here, and the difference matters if you have a vault al
 
 Every version below states which it is, so you can tell at a glance whether an upgrade needs action.
 
+## 0.11.1
+
+- **Documentation only — no vault action.** `README.md` is now a reference and nothing else: install, commands, vault layout, config, sources, updating, frontmatter. The design reasoning that had accumulated there — the daily loop, the desire space, the principles — moved to `DESIGN.md`.
+- The split is not cosmetic. The README's frontmatter block had gone stale (`type` was missing `wishlist`, `status` was missing `seed`) because the file had grown past the point of being read carefully. Reference and reasoning now have separate homes so the reference stays short enough to keep correct.
+- **Existing vaults:** nothing to do.
+
 ## 0.11.0
 
 - **The life-scale tier is `## Dreams`, not a bucket list.** 0.10.0 put it in `20-goals/` as goal notes with `horizon: life`. That was wrong for the ordinary case: "skydive" needs no research plan, and turning every dream into a project is how a dream list stops being a pleasure. `## Dreams` is now a one-line section at the end of `30-lifestyle/wishlist.md`, alongside wishes and with the same treatment — the difference between a dream and a wish is **time horizon, not weight**.
