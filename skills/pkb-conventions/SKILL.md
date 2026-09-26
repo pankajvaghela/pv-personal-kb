@@ -277,7 +277,17 @@ The table is `| Trip | Start | End | Places | People |`. **Dates are separate co
 
 `## Planned` holds `status: active` trips soonest-first by `start`; `## Been` holds `status: done` trips most-recent-first by `end`. A note with any other status is listed separately as unplaced rather than dropped — **a trip missing from its own index is worse than an untidy one.**
 
-**The note is the record; the index is a view of it.** A trip note carries the `## Outline` of the trip in phases, the day-by-day `## Plan`, a `## Booked` list where a checkbox means *confirmed*, a `## Budget` estimated against actual, `## Packing / prep`, and `## After` for what was worth it. Two things deliberately do not live there: **a total** (a sum is derived, and a stored sum goes stale) and **a trip to-do list** (an action with a date belongs on the workboard, where it will actually be seen).
+**The note is the record; the index is a view of it.** A trip note carries the `## Outline` — the trip in **legs**, one row per city or stretch, which is what makes a two-city trip legible before anything is booked — the day-by-day `## Plan` with a time column, a `## Booked` list where a checkbox means *confirmed*, a `## Budget` estimated against actual, `## Packing / prep`, and `## After` for what was worth it.
+
+`## Plan` is one row per thing, not one row per day. A day with four things on it gets four rows with the date left blank on the repeats, because the unit being scheduled is the flight, the check-in, the set — not the day. The `Date` column is ISO; **there is no weekday column, because the weekday follows from the date.**
+
+**A trip built around an event is the ordinary case, not the exotic one.** A festival pass is a booking: it belongs in `## Booked` under `### Events` with its price and payment status, and everything else in the itinerary arranges itself around it.
+
+Three things deliberately do not live in a trip note:
+
+- **A total.** A sum is derived, and a stored sum goes stale the moment a line changes.
+- **A trip to-do list.** An action with a date belongs on the workboard, where `/pkb-morning` reads it and `/pkb-review` notices it going stale. A checklist inside a trip note is a second list nobody sweeps, and a trip note gets opened the week before the trip — exactly when a forgotten action is too late to fix.
+- **Generic prep boilerplate.** "Useful apps", "emergency contacts", "phrases to learn" are the sections that get copied from the last trip, still naming the last trip's city. Anything that is true of every trip is not worth a heading in this one.
 
 **Places you want to go but have not started planning are not here.** They are `## Dreams` in `30-lifestyle/wishlist.md`. A place becomes a trip note when it becomes a plan, which is the same promotion every other want goes through.
 

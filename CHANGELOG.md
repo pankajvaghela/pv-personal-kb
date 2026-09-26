@@ -7,6 +7,16 @@ Two kinds of change live here, and the difference matters if you have a vault al
 
 Every version below states which it is, so you can tell at a glance whether an upgrade needs action.
 
+## 0.12.2
+
+- **The trip template handles the trips people actually take.** `## Outline` is now explicitly **legs** — one row per city or stretch — because a trip that moves between two cities could not be expressed at all before. `## Plan` gained a **Time** column, because what a trip itinerary is made of is *when*: a flight at 06:50, a check-in at 15:00, and a dinner at 20:00 is three rows, not one.
+- **A trip built around an event is the ordinary case.** `### Events` now says what a pass actually carries — place, dates, pass type, booking reference, whether it is paid — since the pass is a booking like any other and the thing the rest of the trip arranges itself around.
+- The `## Plan` weekday column was considered and dropped: it follows from the date, and this vault does not store what it can derive. The date column is ISO.
+- `## Budget` now notes where a shared cost goes — the notes column, as `900/3 = 300`, which says more than `300`.
+- **A generic section does not go unfilled, it gets copied forward wrong.** A "phrases to learn" list and a link to one trip's festival survive into the next trip, still naming the last city. The template therefore has no "useful apps" and no "emergency contacts" — headings true of every trip and specific to none.
+- **Existing vaults:** run `/pkb-upgrade`. It copies the updated `templates/trip.md` — it will show you the diff and ask rather than overwriting, since you may have reshaped that template.
+- _0.12.0 through 0.12.2 are one feature released in three commits: the travels index, its columns, and the trip note it reads._
+
 ## 0.12.1
 
 - **The travels table changes shape.** Columns are now `| Trip | Start | End | Places | People |` — start and end are separate columns instead of one `2026-11-03 → 2026-11-14` range, and who you travelled with gets a column of its own.

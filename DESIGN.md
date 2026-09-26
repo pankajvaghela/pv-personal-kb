@@ -108,7 +108,13 @@ One detail generalizes past this file. The table has a **Start column and an End
 
 ## What a trip note refuses to hold
 
-The trip template is modelled on a real planning document, and the interesting part is what it leaves out.
+The trip template is shaped by how a trip actually gets planned. The interesting part is what it leaves out.
+
+Two structural findings came first. **A trip is made of legs** — a trip that moves between two cities has two stretches, each with its own stay and its own flight between them, and a flat list of days cannot say so. `## Outline` now holds one row per leg. And **the event is usually the reason for the trip**: a festival pass carries a price, a booking reference, and a payment status, and the flights and the accommodation get arranged around it. A pass is a booking, so it belongs in the same `## Booked` list as everything else.
+
+The day-by-day gained a time column for the same reason: what a trip itinerary is actually made of is *when*, and a flight at 06:50, a check-in at 15:00, and a dinner at 20:00 is three facts, not one. A weekday column was considered and dropped — it follows from the date, and this vault does not store what it can derive.
+
+**A heading true of every trip and specific to none does not go unfilled — it gets copied forward wrong.** A generic "phrases to learn" list and a link to one trip's festival reappear under the next trip's city, still naming the last one. That is the argument against shipping "useful apps" and "emergency contacts", and it is why the template has none.
 
 **No total row in the budget.** Estimated against actual, per category, and stop. A total is a sum, and a stored sum is wrong the moment a line changes — the same rule that keeps a wishlist from carrying its own cost running total. Add the column up when you want to know it; that takes a second and is always right.
 

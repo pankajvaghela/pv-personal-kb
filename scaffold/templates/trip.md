@@ -23,7 +23,7 @@ tags: []
 
 ## Outline
 
-The shape of the trip in phases — where you go and what each stretch is for. Worth writing before anything is booked, because it is the part you change when the plan moves.
+The trip in legs — one row per city or stretch, and what each one is for. A trip that moves between two places has two legs, and this is where that is visible before anything is booked.
 
 | When | Where | What |
 |---|---|---|
@@ -31,15 +31,15 @@ The shape of the trip in phases — where you go and what each stretch is for. W
 
 ## Plan
 
-Day by day. Leave it empty until there is something real to schedule.
+Day by day, with the times that matter — a flight, a check-in, a set. A day with four things on it gets four rows; leave the date blank on the repeats. The weekday is not a column because it follows from the date.
 
-| Day | Where | Notes |
-|---|---|---|
-|  |  |  |
+| Date | Time | Where | What |
+|---|---|---|---|
+|  |  |  |  |
 
 ## Booked
 
-A checkbox means **confirmed**. Anything unchecked is the work still outstanding, so this section is the honest status of the trip — and the reason a trip with dates and nothing ticked is worth looking at.
+A checkbox means **confirmed**. Anything unchecked is the work still outstanding, so this section is the honest status of the trip.
 
 Booking references and confirmation codes go on the line. They are not secrets, but this vault is committed and may be pushed, so treat an unshared repo as the assumption.
 
@@ -55,11 +55,13 @@ Booking references and confirmation codes go on the line. They are not secrets, 
 
 ### Events
 
-- [ ] **Event** — dates, place, tickets, link
+The reason for the trip, when there is one. A pass is a booking like any other: it has a price and a payment status, and it is the thing the rest of the trip is arranged around.
+
+- [ ] **Event** — place, dates, pass, booking ref, paid
 
 ## Budget
 
-What it was expected to cost against what it did. No total row: a total is a sum, and a stored sum is wrong the moment a line changes.
+What it was expected to cost against what it did. No total row: a total is a sum, and a stored sum is wrong the moment a line changes. On a shared trip, the notes column is where a split goes — `900/3 = 300` says more than `300` does.
 
 | Category | Estimated | Actual | Notes |
 |---|---|---|---|

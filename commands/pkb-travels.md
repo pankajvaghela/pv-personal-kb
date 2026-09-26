@@ -48,6 +48,8 @@ Two writes, in this order.
 
 Then say what is worth doing next, briefly: `## Outline` is the part worth writing first, since it is what changes when the plan moves, and `## Booked` is where the trip becomes real — an unchecked line there is the outstanding work. A trip with dates and an empty `## Booked` is the state this is designed to make visible.
 
+If the trip is built around an event — a festival, a race, a set — say that the pass belongs in `### Events` with its price and payment status, since that is the line the rest of the plan is arranged around.
+
 **`people` is a list of names, not of links.** Write `Ana`, not `[[Ana]]` — the index decides whether a person note exists and links accordingly, so the field holds the name and the rendering holds the decision. That keeps a trip note readable on its own and keeps the link honest.
 
 If a note with that title already exists, say so and ask whether to update it instead of creating a second.
