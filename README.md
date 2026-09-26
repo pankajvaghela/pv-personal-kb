@@ -2,13 +2,25 @@
 
 A Claude Code plugin that sets up and runs a personal knowledge base as a **plain folder of Markdown files**.
 
-No database, no server, no sync service. Your notes are `.md` files with YAML frontmatter that you can read in Obsidian, grep in a terminal, and still open in ten years. Claude gets commands for the things that are annoying to do by hand — capturing without ceremony, filing an inbox, keeping a workboard honest — and a conventions skill so it files things the same way every time instead of inventing a structure.
+No database, no server, no sync service. Your notes are `.md` files with YAML frontmatter that you can grep in a terminal, diff in git, and still open in ten years. Claude gets commands for the things that are annoying to do by hand — capturing without ceremony, filing an inbox, keeping a workboard honest — and a conventions skill so it files things the same way every time instead of inventing a structure.
+
+## Markdown is the format; Obsidian is the best view of it
+
+The vault is a directory of text files. **Nothing here requires Obsidian** — no command reads or writes Obsidian state, and the plugin never touches `.obsidian/`. Obsidian is simply the nicest way to look at what you have: it renders the wiki-links, draws the graph, and gives you the frontmatter as properties.
+
+| | |
+|---|---|
+| **Required** | `.md` files, YAML frontmatter, plain directories, GFM checkboxes, `[[wiki-links]]` |
+| **Recommended** | Obsidian, as a viewer |
+| **Optional sugar** | Obsidian's Templates plugin (Claude substitutes those variables itself), Dataview, callouts, embeds |
+
+Two honest caveats, both documented in the conventions skill: `[[wiki-links]]` are not CommonMark, so GitHub shows them as literal text — though Foam, Logseq, Dendron, and Quartz all read them. And the `📅` date marker on workboard lines is an Obsidian Tasks convention that means nothing elsewhere, which is why the date is always also readable as plain text.
 
 ## Install
 
 ```bash
 claude plugin marketplace add pankajvaghela/pv-personal-kb
-claude plugin install pv-personal-kb@pv
+claude plugin install pv-personal-kb@pankajvaghela
 ```
 
 Then, in any session:
@@ -71,7 +83,7 @@ Plus a `pkb-librarian` agent for bulk work — filing a large backlog, repairing
 
 **The workboard is literal checkboxes.** Readable and editable as plain text on a phone, in a terminal, in any editor. A Dataview view on top is fine; a Dataview-only workboard is not.
 
-**Obsidian is a viewer, not a dependency.** Callouts, Dataview, and embeds all work — but they are bets on one app, so the conventions prefer plain Markdown where it costs nothing.
+**Wiki-links, and why.** `[[Note Title]]` isn't CommonMark, so GitHub shows it as literal text. It's still the right default: it's the shared convention across file-based PKM tools, and it needs only the note's *filename* rather than a relative path — which matters a lot when an AI is writing the link, since a guessed path fails silently and a filename is either right or obviously missing. Switching to `[Note](Note.md)` is a mechanical conversion if you'd rather have GitHub-native rendering; decide while the vault is small.
 
 ## Frontmatter
 
@@ -88,13 +100,13 @@ tags: []
 
 Dates are ISO-8601, always. `created` is never rewritten; `updated` changes whenever the note does.
 
-## Using it with Obsidian
+## Optional: viewing it in Obsidian
 
-*Open folder as vault* → pick your vault path. Then in Settings → **Files & Links**, set **Template folder location** to `templates/`. The templates use `{{title}}` and `{{date:YYYY-MM-DD}}`, which Obsidian's core Templates plugin substitutes on insert.
+*Open folder as vault* → pick your vault path. That's all that's required. If you also want Obsidian to fill in the templates by hand, go to Settings → **Files & Links**, set **Template folder location** to `templates/`, and the core Templates plugin will substitute `{{title}}` and `{{date:YYYY-MM-DD}}` on insert. Notes created by `/new-project` and `/new-person` come out correct either way, because Claude substitutes those variables itself.
 
 ## Requirements
 
-Claude Code, and optionally Obsidian. `/commit` needs `git`; everything else is plain filesystem work.
+Claude Code. That's it. Obsidian is optional and recommended; `git` is only needed for `/commit`.
 
 ## License
 

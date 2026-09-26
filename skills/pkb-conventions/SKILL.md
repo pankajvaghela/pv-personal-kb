@@ -5,7 +5,27 @@ description: Conventions for the personal knowledge base — resolving the vault
 
 # PKB Conventions
 
-The vault is plain Markdown files with YAML frontmatter, opened in Obsidian. **The files are the source of truth** — there is no database, no server, and no sync. Everything below exists so that months of accumulated notes stay greppable, linkable, and safe to reorganize.
+The vault is plain Markdown files with YAML frontmatter. **The files are the source of truth** — there is no database, no server, and no sync. Everything below exists so that months of accumulated notes stay greppable, linkable, and safe to reorganize.
+
+## What this vault depends on
+
+**Markdown is the format. Everything else is a view of it.** Obsidian is the recommended view — it renders the links, the graph, and the frontmatter — but nothing here requires it. Delete Obsidian tomorrow and the vault is still a directory of readable text.
+
+| Thing | Status |
+|---|---|
+| `.md` files with YAML frontmatter | **Required.** This is the format. |
+| The folder taxonomy | **Required.** Ordinary directories. |
+| GFM task lists | **Required.** Plain checkboxes. |
+| `[[Wiki-links]]` | **Required convention.** Read by Obsidian, Foam, Logseq, Dendron, Quartz, and most other folder-of-Markdown tools. Not CommonMark — see the note below. |
+| Obsidian | Optional. The best view, not a dependency. |
+| Obsidian's Templates plugin | Optional. Substitutes `{{title}}` / `{{date}}` in `templates/`. Claude substitutes them itself, so a note created by a command is correct with or without the plugin. |
+| Dataview, callouts, embeds | Optional. Use them where they earn their keep; they render as nothing outside Obsidian. |
+| `📅 YYYY-MM-DD` on a workboard line | An Obsidian **Tasks** convention. Outside Obsidian it is only an emoji — which is why the date stays readable as plain text. |
+| `.obsidian/` | Editor state. Git ignores the churn and keeps your config. |
+
+**Why wiki-links are deliberate, not accidental.** `[[Note Title]]` is not CommonMark, so GitHub and bare text editors show it as literal text rather than a link. It is still the right default here for two reasons: it is the shared convention across file-based PKM tools, and it needs only the note's **filename**, not a relative path — which matters enormously when an AI writes the link, because a guessed relative path fails silently while a filename is either right or obviously missing.
+
+If you ever want GitHub-native rendering, converting to `[Note](Note.md)` is mechanical. It touches every note, so it is worth deciding while the vault is still small.
 
 ## Resolving the vault root
 
@@ -79,7 +99,7 @@ Type-specific additions:
 
 Wiki-links are the point of the vault: `[[Note Title]]`, `[[Note Title|display text]]`, and `[[Note Title#Heading]]` all work. Link liberally — a link to a note that does not exist yet is a useful marker, not an error.
 
-**Prefer portable Markdown.** Callouts, Dataview queries, and embeds are all fine to use, but each one is a small bet on Obsidian. Where plain Markdown costs nothing — a fenced code block over a callout, a table over a query — prefer plain. The vault should still be readable in a text editor in ten years. This is a preference, not a prohibition: use the Obsidian feature when it genuinely earns its keep.
+**Prefer plain Markdown where it costs nothing.** A fenced code block over a callout, a table over a query, a real word over an emoji. The vault should still read correctly in any text editor in ten years, and every Obsidian-only feature you lean on is one more thing that renders as nothing elsewhere. This is a preference, not a prohibition — use the Obsidian feature when it genuinely earns its keep, and do not contort a note to avoid one.
 
 ## Workboard
 
