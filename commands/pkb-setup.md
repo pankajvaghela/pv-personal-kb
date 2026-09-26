@@ -100,6 +100,7 @@ Give the user, compactly:
 - Folder listing, so they can see what they got.
 - **Then:** `/pkb-capture` to start throwing things in, `/pkb-triage` to sort them, `/pkb-workboard` to see what is live.
 - **Tomorrow morning:** `/pkb-morning` builds a briefing from the configured sources. It starts with the vault alone; `/pkb-morning sources` adds a calendar, a task list, or a Notion inbox when the user wants them.
+- **End of the day:** `/pkb-end-of-the-day` logs what actually changed and commits it. It reads `/pkb-morning`'s briefing and carries unfinished items forward, so the two are worth using as a pair.
 
 **Mention viewers briefly, as an option — not as a next step.** The vault is a folder of Markdown files, and any editor opens it; it is complete and usable without installing anything. If the user uses Obsidian, two things are worth knowing: *Open folder as vault* → pick the path, and set **Template folder location** to `templates/` in Settings → Files & Links so the Templates plugin substitutes the `{{title}}` and `{{date:YYYY-MM-DD}}` variables. Say this once, then move on.
 

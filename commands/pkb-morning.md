@@ -31,6 +31,8 @@ Resolve `$TODAY`, `$NOW`, `$TODAY_START`, `$TODAY_END`, and `$VAULT` in `args` a
 
 If an `mcp` tool name does not resolve, say which one and tell the user to run `/mcp` to see what is actually connected. Never substitute a neighbouring tool name that looks close.
 
+**Then read the previous daily note** — the most recent file before today under `05-daily/*/`, by filename. Take its `## Carried to tomorrow` list and hold it: those belong in the Carried bucket below. This is the seam with `/pkb-end-of-the-day`, and skipping it is how an item gets carried indefinitely without anyone noticing. If an item appears there for the third day running, say so in the briefing rather than listing it a fourth time as if it were new.
+
 ## 3 — Synthesize
 
 This is the whole job. Do not dump the raw signals and call it a briefing.

@@ -6,6 +6,8 @@ allowed-tools: Read, Bash, Glob, Grep
 
 Load the `pkb-conventions` skill and resolve the vault root from it. Call that path `<root>`. Snapshot the vault: `$ARGUMENTS`
 
+This command owns the vault's commit protocol. `/pkb-end-of-the-day` follows the same steps rather than reimplementing them — if you change anything here, particularly the secret check, that command is the one that will silently drift out of sync.
+
 ## 1 — Preflight
 
 `git -C <root> status --porcelain`

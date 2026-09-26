@@ -63,6 +63,7 @@ The numbers are **attention order, not hierarchy**. The folders you touch most s
 |---|---|
 | `/pkb-setup` | Create a vault, or point the plugin at a different one. |
 | `/pkb-morning` | Start-of-day briefing, built from your configured sources. |
+| `/pkb-end-of-the-day` | Log what actually changed, then commit and push. |
 | `/pkb-capture <thing>` | Throw something into the inbox. No decisions, no sorting. |
 | `/pkb-triage` | File inbox items into the right folders — shows a plan first. |
 | `/pkb-workboard` | Show, add, complete, or drop action items. |
@@ -72,6 +73,16 @@ The numbers are **attention order, not hierarchy**. The folders you touch most s
 | `/pkb-commit` | Snapshot the vault to git, with a secret check before staging. |
 
 Plus a `pkb-librarian` agent for bulk work — filing a large backlog, repairing links after a rename, hunting duplicates.
+
+## The daily loop
+
+`/pkb-morning` and `/pkb-end-of-the-day` are two halves of one thing, and neither is much use alone.
+
+The morning command reads your sources and writes a briefing into `05-daily/YYYY-MM/YYYY-MM-DD.md` — what's fixed, what's carried, what it proposes. The evening command reads the git history and the day's note, writes a log underneath that briefing, and commits. The seam is **`## Carried to tomorrow`**: the evening writes it, the next morning reads it.
+
+That loop is why the log is written *against* the morning list rather than as a free-form diary. If something was on the list and didn't happen, the evening entry says so — and if the same item shows up carried for the third day running, the next morning calls that out instead of listing it a fourth time as if it were new.
+
+Two details that make it hold up in practice. The evening command reads `git log --since=midnight` **as well as** `git status`, because after any mid-day commit a status-only check would report a quiet day — the changes exist, just not in the working tree. And a day where nothing happened produces a short log, not a padded one.
 
 ## Sources for the morning briefing
 

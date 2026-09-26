@@ -170,3 +170,49 @@ Rules:
 - The source is literal checkboxes, so `grep` works and any editor's task queries work. A Dataview view on top is fine; a Dataview-only workboard is not — the file has to stay readable as text.
 - Completed items are checked, not deleted. `/pkb-review` sweeps them into `## Done — <month>`.
 - Per-project action items may live inside the project note under `## Actions`. The workboard is for what is live _now_ — promote, do not duplicate.
+
+## Daily notes
+
+`05-daily/YYYY-MM/YYYY-MM-DD.md`, `type: daily`. Two commands write these and they must agree on the shape.
+
+```markdown
+---
+title: 2026-09-26
+type: daily
+status: active
+created: 2026-09-26
+updated: 2026-09-26
+sources: [vault-inbox, calendar]
+tags: []
+---
+
+## Thursday 2026-09-26
+
+**Fixed**
+- 10:00 Standup
+
+**Carried**
+- [ ] Ship the plugin #project/pv-personal-kb
+
+**Proposed**
+- Draft the proposal before 16:00
+
+## Log
+
+### Thursday 2026-09-26, evening
+
+**Done**
+- Shipped the plugin
+
+**Changed**
+- Archived 2 dormant projects
+
+**Carried to tomorrow**
+- [ ] Finish the proposal — blocked on the client's numbers
+```
+
+`/pkb-morning` writes the briefing and leaves `## Log` empty. `/pkb-end-of-the-day` appends under it. Both are idempotent: re-running either rewrites its own section rather than adding a second copy.
+
+**The `## Carried to tomorrow` list is the seam between them** — the evening writes it, the next morning reads it into its Carried bucket. That loop is the reason both commands exist; either one alone is just a note-taking prompt.
+
+Daily notes are never triaged. They are a log, not capture — which is exactly why they live outside `00-inbox/`.
