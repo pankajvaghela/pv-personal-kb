@@ -22,6 +22,8 @@ This command owns the vault's commit protocol. `/pkb-end-of-the-day` follows the
 
 If any path matches, **stop and report it** — do not stage, do not commit, and do not "fix" it by deleting the file. Name the file, say why it looks sensitive, and let the user decide.
 
+**A filename check is not enough for `.pkb/config.json`.** That file is committed by design and its name looks innocent, but it is where a source's details live — so a credential pasted into a `command`, `args`, or `env` value would sail straight past the scan above. If `.pkb/config.json` is among the changed paths, read it and check the *values*: anything in an `env` map or a `command` that is not a `$SECRET:<key>` reference and looks like a token, key, or password is a stop. Say which key it is under and what to do — move the value to `secrets` in `~/.config/pv-personal-kb/config.json` and reference it as `$SECRET:<key>`. **Do not echo the value into the transcript.**
+
 Also confirm the vault's own ignore rules are intact: `git -C <root> check-ignore -v .obsidian/workspace.json` should return a match. If `.gitignore` is missing or has been emptied, say so before staging — an editor config directory committed once is very hard to walk back.
 
 Never run `git add -A` before this check passes. If a suspicious path is present but the user wants to proceed anyway, stage explicit paths instead of the whole tree.

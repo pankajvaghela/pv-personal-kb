@@ -3,9 +3,17 @@
 Two kinds of change live here, and the difference matters if you have a vault already:
 
 - **Plugin changes** — commands, the skill, the agent. These arrive with `claude plugin update`. Nothing to do.
-- **Existing vaults** — anything that changes the folder structure or the scaffold files (`AGENTS.md`, `Home.md`, `.gitignore`, `templates/`, `workboard.md`). These do **not** propagate on their own. Run `/pkb-upgrade`.
+- **Existing vaults** — anything that changes the folder structure or the scaffold files (`AGENTS.md`, `Home.md`, `.gitignore`, `templates/`, `workboard.md`, `.pkb/`). These do **not** propagate on their own. Run `/pkb-upgrade`.
 
 Every version below states which it is, so you can tell at a glance whether an upgrade needs action.
+
+## 0.8.0
+
+- **Config splits in two, by whether it belongs in git.** `<vault>/.pkb/config.json` now holds the vault's own settings — `name` and `sources` — and is committed with the vault, so it is versioned and travels to a new machine. `~/.config/pv-personal-kb/config.json` shrinks to the vault's `root` plus a `secrets` map: the two things that genuinely cannot be committed.
+- `.pkb/` replaces the loose `.pkb-version` file at the vault root, holding `config.json` and `version` together. The scaffold now ships `.pkb/config.json`.
+- Command sources can take credentials as `"env": { "TOKEN": "$SECRET:key" }`, resolved from the machine-local `secrets` at read time. Never written into the vault.
+- `/pkb-commit` now reads `.pkb/config.json` and checks its **values**, not just its filename — the filename scan would never have caught a token pasted into a `command`.
+- **Existing vaults:** run `/pkb-upgrade`. It moves `name` and `sources` out of the machine config into `<root>/.pkb/config.json`, reduces the machine config to `root` and `secrets`, and moves `.pkb-version` to `.pkb/version`. If a source in the old machine config held a literal credential, the upgrade converts it to a `$SECRET:` reference and moves the value into `secrets` rather than copying it into the committed file. No notes are touched.
 
 ## 0.7.0
 

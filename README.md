@@ -31,9 +31,34 @@ Then, in any session:
 /pkb-setup
 ```
 
-It asks where the vault should live and what to call it, scaffolds the folders, and writes a config. You can put the vault anywhere — the plugin reads the path from `~/.config/pv-personal-kb/config.json` and never hardcodes one.
+It asks where the vault should live and what to call it, scaffolds the folders, and writes two config files. You can put the vault anywhere — the plugin reads the path from config and never hardcodes one.
 
 Set up more than one vault by re-running `/pkb-setup` and pointing it somewhere else.
+
+## Two config files, split by what belongs in git
+
+| | |
+|---|---|
+| **`~/.config/pv-personal-kb/config.json`** | Machine-local, never committed. Two jobs only: the vault's path, so it can be found from anywhere, and secrets. |
+| **`<vault>/.pkb/config.json`** | In the vault, committed, travels with it. Everything else — the vault's name, and its sources. |
+
+```jsonc
+// ~/.config/pv-personal-kb/config.json — this machine only
+{
+  "root": "/Users/you/brain",
+  "secrets": { "gtsk_token": "..." }
+}
+
+// <vault>/.pkb/config.json — committed with the vault
+{
+  "name": "Brain",
+  "sources": [ /* ... */ ]
+}
+```
+
+The split is the point. Configuration that *describes the vault* belongs with the vault, so it's versioned, diffable, and survives moving to another machine — clone the repo, set one path, and the vault is itself again. Only the two things that genuinely can't live there are kept out: the path that finds the vault when you're not standing in it, and secrets.
+
+**Which means the vault config is committed, so no credential ever goes in it.** A source that needs auth references it as `$SECRET:<key>`, and the value lives in the machine config.
 
 ## Updating
 
@@ -62,6 +87,7 @@ The split is deliberate. A vault is meant to be a folder of files you own, and s
 ├── AGENTS.md            conventions, for any AI or editor working in the vault
 ├── Home.md              entry note
 ├── .gitignore           ignores editor state, keeps your config
+├── .pkb/                config.json (yours, committed) + version (written by setup)
 ├── 00-inbox/            unsorted capture — the default landing zone
 ├── 05-daily/            one note per day, filed under YYYY-MM/
 ├── 10-workboard/        action items, as literal task lists
@@ -107,11 +133,11 @@ Two details that make it hold up in practice. The evening command reads `git log
 
 ## Sources for the morning briefing
 
-`/pkb-morning` reads from whatever you point it at and reduces it to a short list of action points. Sources live in the config, so adding one is a config edit — not a plugin change:
+`/pkb-morning` reads from whatever you point it at and reduces it to a short list of action points. Sources live in the vault's own config, so adding one is a config edit — committed with the vault, not stranded on one machine:
 
-```json
+```jsonc
+// <vault>/.pkb/config.json
 {
-  "root": "/Users/you/brain",
   "name": "Brain",
   "sources": [
     { "id": "vault-inbox", "kind": "vault", "label": "Vault inbox", "path": "00-inbox", "enabled": true },
@@ -120,7 +146,8 @@ Two details that make it hold up in practice. The evening command reads `git log
       "args": { "timeMin": "$TODAY_START", "timeMax": "$TODAY_END" }, "enabled": true },
     { "id": "notion-inbox", "kind": "mcp", "label": "Notion inbox",
       "tool": "mcp__notion__search", "args": {}, "enabled": false },
-    { "id": "tasks", "kind": "command", "label": "Google Tasks", "command": "gtsk list --json", "enabled": false }
+    { "id": "tasks", "kind": "command", "label": "Google Tasks", "command": "gtsk list --json",
+      "env": { "GTSK_TOKEN": "$SECRET:gtsk_token" }, "enabled": false }
   ]
 }
 ```
@@ -135,7 +162,7 @@ Two details that make it hold up in practice. The evening command reads `git log
 
 **Sources are read-only, deliberately.** The briefing never marks a Notion row processed, completes a remote task, or sends mail. Writing back would re-create the two-way sync problem this design exists to avoid. When something is handled, you record it in the vault.
 
-Two things worth knowing before you wire up a source. MCP tool names are specific to your install — `/mcp` lists what you actually have, and the plugin will report a missing tool rather than guess at a similar name. And **credentials never go in the vault or the config**: auth belongs to the MCP server, or to the command's own environment.
+Two things worth knowing before you wire up a source. MCP tool names are specific to your install — `/mcp` lists what you actually have, and the plugin will report a missing tool rather than guess at a similar name. And **credentials never go in the vault**: an `mcp` source's auth belongs to the MCP server, and a `command` source takes `$SECRET:<key>` in its `env`, which resolves from the machine-local config. `/pkb-commit` checks for this specifically, since the vault config is committed.
 
 ## Design choices
 

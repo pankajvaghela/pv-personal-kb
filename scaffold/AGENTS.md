@@ -36,6 +36,8 @@ The numeric prefixes encode attention order, not hierarchy.
 
 Only two folders go deeper than one level: `05-daily/YYYY-MM/YYYY-MM-DD.md` and `50-projects/<slug>/`. Create the month folder if it is missing. Everywhere else stays flat.
 
+`.pkb/` is not part of the taxonomy — it is the tooling's own directory. `config.json` holds this vault's settings and **is committed**, so no credential ever goes in it. `version` records which scaffold built the vault and is machine-written.
+
 ## Rules
 
 - **One note = one topic.** Filenames are link targets, so a rename breaks inbound links — repair them in the same pass.

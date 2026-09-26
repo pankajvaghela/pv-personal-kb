@@ -29,37 +29,53 @@ The vault is plain Markdown files with YAML frontmatter. **The files are the sou
 
 If you ever want GitHub-native rendering, converting to `[Note](Note.md)` is mechanical. It touches every note, so it is worth deciding while the vault is still small.
 
-## Resolving the vault root
+## Two config files, split by what belongs in git
 
-The vault can live anywhere. Resolve it in this order:
-
-1. `$PKB_ROOT` if set.
-2. `~/.config/pv-personal-kb/config.json`:
-
-   ```json
-   { "root": "/Users/you/path-to/brain", "name": "Brain" }
-   ```
-
-3. **Neither present → stop.** Do not guess a path and do not create a vault by accident. Tell the user the config is missing and that `/pkb-setup` creates it.
-
-Read the config once at the start of a task and use that absolute path for every operation. Never hardcode a vault path into a note, a template, or this plugin's files.
-
-**Two files sit at the vault root that are not notes.** `AGENTS.md` holds these conventions for tools that do not have this plugin. `.pkb-version` records which scaffold version built the vault, and `/pkb-upgrade` reads it. Neither is a note, neither is hand-edited, and neither belongs in the taxonomy.
-
-## Sources
-
-Some commands read from outside the vault — a calendar, a task list, a Notion inbox. Sources are **declared in the config, never hardcoded**, so adding one is a config edit rather than a code change.
+**`~/.config/pv-personal-kb/config.json`** — machine-local, never committed. Two jobs, and only two: find the vault, and hold secrets.
 
 ```json
 {
   "root": "/Users/you/path-to/brain",
+  "secrets": { "notion_token": "ntn_xxx" }
+}
+```
+
+**`<root>/.pkb/config.json`** — lives in the vault, committed, travels with it. Everything else:
+
+```json
+{
+  "name": "Pankaj's PKB",
+  "sources": []
+}
+```
+
+The split is deliberate. Configuration that *describes the vault* — what it is called, what it reads from — belongs with the vault, so it is versioned, diffable, and survives a move to another machine. Only the two things that cannot live there are kept out: the path that makes the vault findable when you are not standing in it, and secrets.
+
+## Resolving the vault root
+
+1. `$PKB_ROOT` if set.
+2. `root` from the machine config.
+3. **Neither present → stop.** Do not guess a path and do not create a vault by accident. Tell the user the config is missing and that `/pkb-setup` creates it.
+
+Read the machine config for the path, then read `<root>/.pkb/config.json` for everything else. Do both once at the start of a task, and use that absolute path for every operation. Never hardcode a vault path into a note, a template, or this plugin's files.
+
+**Vaults from before 0.8 have no `.pkb/config.json`** — their `name` and `sources` still sit in the machine config. Fall back to those rather than failing, and tell the user to run `/pkb-upgrade` to move them where they belong.
+
+**Two things sit at the vault root that are not notes.** `AGENTS.md` holds these conventions for tools that do not have this plugin. `.pkb/` is the plugin's own directory — `config.json`, which is yours to edit, and `version`, which `/pkb-setup` and `/pkb-upgrade` write. Neither belongs in the taxonomy, and only `config.json` is ever hand-edited.
+
+## Sources
+
+Some commands read from outside the vault — a calendar, a task list, a Notion inbox. Sources are **declared in the vault's own `.pkb/config.json`, never hardcoded**, so adding one is a config edit rather than a code change — and the result is committed with the vault rather than stranded on one machine.
+
+```json
+{
   "name": "Brain",
   "sources": [
     { "id": "vault-inbox", "kind": "vault", "label": "Vault inbox", "path": "00-inbox", "enabled": true },
     { "id": "workboard", "kind": "vault", "label": "Workboard", "path": "10-workboard/workboard.md", "enabled": true },
     { "id": "calendar", "kind": "mcp", "label": "Today's calendar", "tool": "mcp__google-calendar__list_events", "args": { "timeMin": "$TODAY_START", "timeMax": "$TODAY_END" }, "enabled": true },
     { "id": "notion-inbox", "kind": "mcp", "label": "Notion inbox", "tool": "mcp__notion__search", "args": {}, "enabled": false },
-    { "id": "tasks", "kind": "command", "label": "Google Tasks", "command": "gtsk list --json", "enabled": false }
+    { "id": "tasks", "kind": "command", "label": "Google Tasks", "command": "gtsk list --json", "env": { "GTSK_TOKEN": "$SECRET:gtsk_token" }, "enabled": false }
   ]
 }
 ```
@@ -72,11 +88,15 @@ Three kinds, and that is deliberately the whole vocabulary:
 | `mcp`     | An MCP tool, by name          | That MCP server to be connected. |
 | `command` | A shell command's stdout      | The command to exist.            |
 
+**Credentials never appear in this file, because this file is committed.** A `command` source that needs auth names the secret instead of holding it: `"$SECRET:gtsk_token"` resolves at read time from the `secrets` map in the machine-local config and is passed to the command as an environment variable. It is never written back into the vault, and never echoed. An `mcp` source needs no secrets at all — auth belongs to the MCP server.
+
+If you ever find a literal token in `<root>/.pkb/config.json`, stop and say so. The file is in git, and a pushed secret is a leaked secret — moving it to the machine config is the fix, plus rotating it if it was already pushed.
+
 **Sources are read-only.** Nothing here writes back to a source — do not mark a Notion row processed, complete a remote task, or send mail. That would re-create the two-way sync problem this whole design avoids. When something is handled, record it in the vault.
 
 **`mcp` tool names are installation-specific.** They come from whichever servers the user has connected, and `/mcp` lists them. Never guess a name that looks adjacent — report it missing and point at `/mcp`.
 
-**Substitutions** available in `args` and `command`: `$TODAY`, `$NOW`, `$TODAY_START`, `$TODAY_END`, `$VAULT`. Resolve them before running anything.
+**Substitutions** available in `args` and `command`: `$TODAY`, `$NOW`, `$TODAY_START`, `$TODAY_END`, `$VAULT`. Resolve them before running anything. `$SECRET:<key>` is the one exception — it appears only inside a source's `env` map, resolves from the machine-local `secrets`, and must never be printed, logged, or committed.
 
 **A source that fails is not a source that is empty.** Anything reading a source must report `ok`, `empty`, or `failed` per source, and never let a failure pass as silence.
 

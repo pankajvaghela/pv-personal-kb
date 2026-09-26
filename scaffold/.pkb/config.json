@@ -1,0 +1,19 @@
+{
+  "name": "",
+  "sources": [
+    {
+      "id": "vault-inbox",
+      "kind": "vault",
+      "label": "Vault inbox",
+      "path": "00-inbox",
+      "enabled": true
+    },
+    {
+      "id": "workboard",
+      "kind": "vault",
+      "label": "Workboard",
+      "path": "10-workboard/workboard.md",
+      "enabled": true
+    }
+  ]
+}

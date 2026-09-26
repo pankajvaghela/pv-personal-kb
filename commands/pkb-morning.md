@@ -10,7 +10,9 @@ Otherwise, build today's briefing.
 
 ## 1 — Read the source registry
 
-Read `~/.config/pv-personal-kb/config.json` and take its `sources` array. The schema is documented in the conventions skill.
+Read `<root>/.pkb/config.json` and take its `sources` array. The schema is documented in the conventions skill. Sources live in the vault rather than the machine config so they are versioned with the vault and survive a move to another machine.
+
+- **Vaults from before 0.8** have no `.pkb/config.json` — their `sources` are still in `~/.config/pv-personal-kb/config.json`. Read those and continue, but tell the user to run `/pkb-upgrade` to move them into the vault.
 
 - **No `sources` key, or every entry disabled** → say so plainly, and show the two sources that need no setup: `vault` entries pointing at `00-inbox/` and `10-workboard/workboard.md`. Offer to add them. Do not run a briefing against nothing and present the silence as a clear day.
 - **Sources exist** → continue.
@@ -23,9 +25,11 @@ For each enabled source, in order:
 |---|---|
 | `vault` | Read the path inside `<root>`. |
 | `mcp` | Call the named MCP tool with its `args`. |
-| `command` | Run it with Bash. |
+| `command` | Run it with Bash. If the source has an `env` map, resolve each `$SECRET:<key>` from the `secrets` map in `~/.config/pv-personal-kb/config.json` and pass it as that environment variable for the run. |
 
 Resolve `$TODAY`, `$NOW`, `$TODAY_START`, `$TODAY_END`, and `$VAULT` in `args` and `command` **before** running anything.
+
+A `$SECRET:` key that is missing from the machine config makes the source `failed` — name the missing key, never the value, and never fall back to a literal token found anywhere else.
 
 **Report each source's status as you go** — `ok`, `empty`, or `failed`. One failure must never stop the run, and a source that failed must never be quietly omitted: a briefing that silently drops your calendar is worse than one that admits it could not reach it.
 
@@ -105,13 +109,15 @@ Two or three lines: what was written, how many sources answered, which did not a
 
 ## Managing sources
 
-`/pkb-morning sources` — read the `sources` array and show a table: `id`, `kind`, what it points at, enabled. Then test each enabled source and report `ok` / `empty` / `failed` with the reason.
+`/pkb-morning sources` — read the `sources` array and show a table: `id`, `kind`, what it points at, enabled. Then test each enabled source and report `ok` / `empty` / `failed` with the reason. Never print a resolved secret.
 
-If the user asks to add, enable, or disable one, edit the `sources` array in the config and confirm the change. Ask for whatever the mechanism needs — a `vault` path, an `mcp` tool name, or a `command` — and nothing more.
+If the user asks to add, enable, or disable one, edit the `sources` array in `<root>/.pkb/config.json` and confirm the change. Ask for whatever the mechanism needs — a `vault` path, an `mcp` tool name, or a `command` — and nothing more.
+
+**A source that needs a credential takes it from `$SECRET:<key>`, never literally.** If the user offers a token to paste into the config, refuse and put it in the `secrets` map of `~/.config/pv-personal-kb/config.json` instead — the vault config is committed, so a token written there is a token published. Say that in one sentence, then do the right thing.
 
 ## Hard rules
 
 - **Sources are read-only.** Never mark a Notion row processed, complete a remote task, or send anything. The vault is the only thing this command writes. Writing back re-creates the two-way sync problem this whole design exists to avoid.
-- **Never store a credential in the vault or the config.** Source auth belongs to the MCP server or the command's own environment.
+- **Never store a credential in the vault.** `<root>/.pkb/config.json` is committed; secrets belong in `~/.config/pv-personal-kb/config.json`, which is not. Source auth otherwise belongs to the MCP server or the command's own environment.
 - **Never fail silently on a source.** Report it, and never let a failed source look like an empty one.
 - **Never present a briefing you could not build.** If every source fails, say that — do not show an empty day.

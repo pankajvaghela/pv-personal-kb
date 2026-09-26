@@ -10,13 +10,13 @@ Load the `pkb-conventions` skill and resolve the vault root from it (call that p
 
 ## 1 — Establish both versions
 
-- **Vault:** read `<root>/.pkb-version`.
+- **Vault:** read `<root>/.pkb/version`. If that is absent, check the older `<root>/.pkb-version` — a vault stamped by 0.7 only has that, and step 4 moves it.
 - **Plugin:** read `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json`.
 
 Then read `${CLAUDE_PLUGIN_ROOT}/CHANGELOG.md` and pull out every entry between the vault's version and the plugin's, **especially the "Existing vaults" lines**. Those are the structural changes — a moved folder, a new required file — that copying files alone will not fix.
 
 - **Equal versions** → report that, then still offer the file diff below. A vault can be on the current version and still have hand-edited scaffold files worth seeing.
-- **No `.pkb-version`** → the vault predates version stamping. Treat it as unknown, say so plainly, and run the full comparison rather than assuming it is current.
+- **No stamp at either path** → the vault predates version stamping. Treat it as unknown, say so plainly, and run the full comparison rather than assuming it is current.
 - **Vault version is newer than the plugin** → the plugin was rolled back or the vault was copied from elsewhere. Say so and stop. Do not "fix" a newer vault with an older scaffold.
 
 ## 2 — Reconcile folders, additively
@@ -39,8 +39,14 @@ The scaffold ships these, two of them renaming on the way in:
 | `gitignore` | `<root>/.gitignore` |
 | `workboard.md` | `<root>/10-workboard/workboard.md` |
 | `templates/*.md` | `<root>/templates/*.md` |
+| `.pkb/config.json` | `<root>/.pkb/config.json` — **special case, below** |
 
-For each, compare against the vault copy:
+**`.pkb/config.json` is the exception.** It ships in the scaffold, but it is the user's configuration rather than scaffold to be kept in sync — the scaffold copy has an empty `name`, and every vault's will differ within minutes of setup. So:
+
+- **Missing in the vault** → copy the scaffold version in. This is the pre-0.8 case, and step 4 fills it from the old machine config if there is one.
+- **Present** → **never touch it, not even to offer a diff.** A differing config is the normal state, not a stale copy.
+
+For everything else, compare against the vault copy:
 
 - **Missing in the vault** → copy it in. A file the scaffold now ships but the vault lacks is the easy case.
 - **Identical** → nothing to do.
@@ -58,9 +64,18 @@ A migration that moves or rewrites **notes** — rather than structure — needs
 
 Most upgrades will have nothing here. Say so when that is the case rather than implying work happened.
 
+**The 0.8 migration, in full** — it moves config, never notes, and is worth spelling out because it touches a file the user may have edited:
+
+1. Read `~/.config/pv-personal-kb/config.json`. If it holds `name` or a non-empty `sources`, the vault is pre-0.8.
+2. Merge those into `<root>/.pkb/config.json` — `sources` and `name` as keys, creating the file from the scaffold version if it does not exist. **Vault values win on conflict**: if the vault already has a key, leave it and mention the stale machine value rather than overwriting.
+3. **If any source in the old machine config carries a literal credential** — a token, key, or password in a `command`, `args`, or an `env` value that is not a `$SECRET:` reference — do not copy it into the vault. Move the value into `secrets` in the machine config, write the `$SECRET:<key>` reference in its place, and say so explicitly. The vault is committed, and this is the one way this migration could leak something.
+4. Rewrite the machine config down to `{ "root": ..., "secrets": ... }`. Nothing else survives there.
+5. Move `<root>/.pkb-version` to `<root>/.pkb/version` if the old path exists, then continue to step 5.
+6. Report what moved, so the change is legible in the diff before it is committed.
+
 ## 5 — Stamp and report
 
-Write `<root>/.pkb-version`:
+Write `<root>/.pkb/version`:
 
 ```json
 { "scaffold": "<plugin version>", "upgraded": "<YYYY-MM-DD>", "plugin": "pv-personal-kb" }
@@ -75,5 +90,7 @@ If `$ARGUMENTS` is `check`, do steps 1–4 read-only: report everything you woul
 - **Never modify a note.** This command touches structure and scaffold files, nothing else. Not one line of anyone's notes.
 - **Never delete, move, or rename.** Folders are created, never removed.
 - **Never overwrite a differing file without showing the diff and getting a yes.**
+- **Never touch `.pkb/config.json` when it already exists.** Differing is its normal state.
+- **Never carry a credential into the vault.** `<root>/.pkb/config.json` is committed. A literal token found in an old machine config becomes a `$SECRET:` reference plus an entry in the machine-local `secrets`, never a copied value.
 - **Never upgrade a vault whose stamp is newer than the plugin.**
 - **Never leave a migration half-applied.** Either it completes, or nothing was changed.
