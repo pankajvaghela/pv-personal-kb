@@ -39,6 +39,7 @@ The scaffold ships these, two of them renaming on the way in:
 | `gitignore` | `<root>/.gitignore` |
 | `workboard.md` | `<root>/10-workboard/workboard.md` |
 | `30-lifestyle/wishlist.md` | same path — an empty wishlist, safe to copy in |
+| `40-travels/travels.md` | same path — an empty index, regenerated from your trip notes by `/pkb-travels` |
 | `templates/*.md` | `<root>/templates/*.md` |
 | `.pkb/config.json` | `<root>/.pkb/config.json` — **special case, below** |
 

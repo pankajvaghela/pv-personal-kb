@@ -45,9 +45,10 @@ It asks where the vault should live and what to call it, scaffolds the folders, 
 | `/pkb-wishlist` | Show, add to, or resolve the wishlist. |
 | `/pkb-curious` | Note something you want to know about — a seed note. |
 | `/pkb-dreams` | Things you want to do in your life. |
+| `/pkb-travels` | Travels index — the table of every trip, kept in sync with the notes. |
 | `/pkb-new-project <name>` | Start a project note from the template. |
 | `/pkb-new-person <name>` | Create or update a person note — searches for a duplicate first. |
-| `/pkb-review` | Weekly sweep: inbox, workboard, wishlist, stale projects, orphan notes, broken links. |
+| `/pkb-review` | Weekly sweep: inbox, workboard, wishlist, dreams, travels, stale projects, orphan notes, broken links. |
 | `/pkb-commit` | Snapshot the vault to git, with a secret check before staging. |
 
 Plus a `pkb-librarian` agent for bulk work — filing a large backlog, repairing links after a rename, hunting duplicates.
@@ -65,7 +66,7 @@ Plus a `pkb-librarian` agent for bulk work — filing a large backlog, repairing
 ├── 10-workboard/        action items, as literal task lists
 ├── 20-goals/            outcomes, with a target date or horizon: life
 ├── 30-lifestyle/        routines, health, habits, home, money — and wishlist.md
-├── 40-travels/          trips, itineraries, places
+├── 40-travels/          trips, itineraries, places — and travels.md, the index
 ├── 50-projects/         time-bound efforts, one folder each
 ├── 60-people/           one note per person
 ├── 70-knowledge/        evergreen notes and reference — including seeds
@@ -145,7 +146,7 @@ It creates folders that are new, copies scaffold files that are missing, and **s
 ```yaml
 ---
 title: Human-readable title
-type: project | person | trip | lifestyle | goal | note | inbox | daily | workboard | wishlist
+type: project | person | trip | lifestyle | goal | note | inbox | daily | workboard | wishlist | travels
 status: active | seed | paused | done | archived
 created: 2026-09-26
 updated: 2026-09-26

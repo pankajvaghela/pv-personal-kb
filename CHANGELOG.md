@@ -7,6 +7,16 @@ Two kinds of change live here, and the difference matters if you have a vault al
 
 Every version below states which it is, so you can tell at a glance whether an upgrade needs action.
 
+## 0.12.0
+
+- **The travels folder gets an index.** `40-travels/travels.md` is a table of every trip, under `## Planned` (sorted by `start`) and `## Been` (sorted by `end`, most recent first).
+- **It is generated, not curated.** `/pkb-travels list` rebuilds it from the `title`, `start`, `end`, `places`, and `status` frontmatter of the trip notes in the same folder. A row is never hand-edited: if it is wrong, the note is wrong. A hand-patched row would be silently reverted on the next rebuild, which is the point — the index cannot become a second place a fact lives.
+- `/pkb-travels add <place>` creates the note (`Kyoto 2026`, named for the trip rather than the place, so two trips to the same city get two notes) and regenerates the index; `been <trip>` flips it to `done` and moves it from `## Planned` to `## Been`.
+- A trip whose status is neither `active` nor `done` is **listed separately as unplaced** rather than dropped. A note missing from its own index is worse than an untidy one.
+- New `travels` frontmatter type. `/pkb-review` regenerates the index and flags any trip still `active` past its `end` date — the one kind of staleness an index can actually see, and it asks rather than assuming, since a trip you have not written up yet is not one you never took.
+- `AGENTS.md` caught up: it was missing `wishlist` from its `type` list, `seed` from its `status` list, and `## Dreams` from its wishlist section.
+- **Existing vaults:** run `/pkb-upgrade`. It copies an empty `40-travels/travels.md` in. Nothing else changes, and no notes are touched.
+
 ## 0.11.1
 
 - **Documentation only — no vault action.** `README.md` is now a reference and nothing else: install, commands, vault layout, config, sources, updating, frontmatter. The design reasoning that had accumulated there — the daily loop, the desire space, the principles — moved to `DESIGN.md`.

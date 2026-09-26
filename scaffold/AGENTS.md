@@ -25,7 +25,7 @@ If the `pv-personal-kb` plugin is installed, load the `pkb-conventions` skill �
 | `10-workboard/` | Action items — what is live right now. |
 | `20-goals/` | Outcomes with a target date. |
 | `30-lifestyle/` | Routines, health, habits, home, money. |
-| `40-travels/` | Trips, itineraries, places. |
+| `40-travels/` | Trips, itineraries, places — plus `travels.md`, the index of all of them. |
 | `50-projects/` | Time-bound efforts with a finish line. One folder per project. |
 | `60-people/` | One note per person. |
 | `70-knowledge/` | Evergreen notes and reference. |
@@ -53,8 +53,8 @@ Only two folders go deeper than one level: `05-daily/YYYY-MM/YYYY-MM-DD.md` and 
 ```yaml
 ---
 title: Human-readable title
-type: project | person | trip | lifestyle | goal | note | inbox | daily | workboard
-status: active | paused | done | archived
+type: project | person | trip | lifestyle | goal | note | inbox | daily | workboard | wishlist | travels
+status: active | seed | paused | done | archived
 created: 2026-09-26
 updated: 2026-09-26
 tags: []
@@ -69,6 +69,16 @@ Type-specific: `project` gets `owner`/`due`/`outcome`; `person` gets `relationsh
 
 ## Wishlist
 
-`30-lifestyle/wishlist.md` holds things that might be wanted, one line each, under `## Off hold` (waiting period over), `## Holding` (still inside it), `## Needed` (actually needed, no wait), and `## Done`.
+`30-lifestyle/wishlist.md` holds things that might be wanted, one line each, under `## Off hold` (waiting period over), `## Holding` (still inside it), `## Needed` (actually needed, no wait), `## Dreams`, and `## Done`.
 
 A wish is deliberately undated and unplanned — that is what makes it a wish. If it acquires a target date it becomes a goal in `20-goals/`; a place becomes a `40-travels/` note; a single next action becomes a workboard line. Nothing ever leaves by being ignored, and nothing computed (totals, day counts) is ever written into the file.
+
+`## Dreams` is the life-scale tier: things you want to do in your life. Same one-line shape as a wish, different time horizon. No waiting period and no review pressure — a dream is allowed to sit for years, and must never be reported as overdue. When one gets real it is promoted to a goal note in `20-goals/`.
+
+## Travels
+
+`40-travels/travels.md` is the index: a table of every trip, under `## Planned` and `## Been`.
+
+**It is generated, not curated** — rebuilt from the `title`, `start`, `end`, `places`, and `status` frontmatter of the other notes in the folder. Never hand-edit a row: if a row is wrong, the note's frontmatter is wrong. A hand-patched row is silently reverted the next time the index is rebuilt.
+
+A trip is a note named for the trip rather than the place (`Kyoto 2026`, not `Kyoto`) so two trips to the same city get two notes. Anything not on the index is either a new note waiting for a rebuild, or a place that belongs in `## Dreams`.

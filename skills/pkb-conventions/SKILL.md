@@ -118,7 +118,7 @@ If you ever find a literal token in `<root>/.pkb/config.json`, stop and say so. 
 | `10-workboard/` | Action items — what is live right now. See below.              | `workboard`   |
 | `20-goals/`     | Outcomes — dated, or life-scale at `horizon: life`.            | `goal`        |
 | `30-lifestyle/` | Routines, health, habits, home, money. Holds `wishlist.md`.     | `lifestyle`   |
-| `40-travels/`   | Trips, itineraries, places.                                    | `trip`        |
+| `40-travels/`   | Trips, itineraries, places. Holds `travels.md`, the index.     | `trip`        |
 | `50-projects/`  | Time-bound efforts with a finish line. One folder per project. | `project`     |
 | `60-people/`    | One note per person.                                           | `person`      |
 | `70-knowledge/` | Evergreen notes and reference — the graph core. Seeds live here too, as `status: seed`. | `note`        |
@@ -138,7 +138,7 @@ Minimum viable. Add a field only when a real query or view consumes it; an unuse
 ```yaml
 ---
 title: Human-readable title
-type: project | person | trip | lifestyle | goal | note | inbox | daily | workboard | wishlist
+type: project | person | trip | lifestyle | goal | note | inbox | daily | workboard | wishlist | travels
 status: active | seed | paused | done | archived
 created: 2026-09-26
 updated: 2026-09-26
@@ -264,6 +264,16 @@ The body is optional, and one line is a complete seed — why it is worth knowin
 **Occasion tags** are what make a seed findable when its moment arrives: `#occasion/home` for the art you would buy for the flat, `#occasion/date` for the topic you would bring up, `#occasion/gift`. Use them only when there is a real occasion — a tag nobody queries is another field to maintain for nothing.
 
 A seed can lead to a wish, and that is a link rather than a conversion: the wishlist line references `[[Jan Schoonhoven]]` and the seed stays where it is.
+
+## Travels
+
+`40-travels/` is flat — one note per trip, titled with the trip rather than the place (`Kyoto 2026`, not `Kyoto`; two trips to the same city need two notes). `travels.md` in the same folder is the **index**: a table of every trip, generated from the trip notes.
+
+**The index is generated, not curated.** `/pkb-travels` rebuilds it from each note's `title`, `start`, `end`, `places`, and `status`. Never hand-edit a row — fix the note's frontmatter and regenerate, or the next rebuild silently reverts it. The file exists so the whole travel history is visible as a table in any editor; it is not a second place where trip facts live.
+
+`## Planned` holds `status: active` trips soonest-first; `## Been` holds `status: done` trips most-recent-first. A note with any other status is listed separately as unplaced rather than dropped — **a trip missing from its own index is worse than an untidy one.**
+
+**Places you want to go but have not started planning are not here.** They are `## Dreams` in `30-lifestyle/wishlist.md`. A place becomes a trip note when it becomes a plan, which is the same promotion every other want goes through.
 
 ## Dreams
 

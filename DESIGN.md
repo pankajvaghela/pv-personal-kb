@@ -94,6 +94,16 @@ No pressure, deliberately. A dream is on the list because it's true about you, n
 
 The review pressure across the three tiers is **deliberately uneven**, and that's the part to protect from well-meaning improvement: ignoring a wish is information about you, ignoring a seed or a dream means nothing. A command that nags about the latter turns something pleasurable into a debt.
 
+## Indexes are generated, not curated
+
+`40-travels/travels.md` is the one file in the vault that is a table, and it exists because a trip folder is the one place where you want the whole set at a glance. It's built from the frontmatter of the trip notes next to it.
+
+The distinction matters more than the file does. A curated index is a **second place a fact lives**, and a second place is a second thing to keep true — the failure is not that it's wrong on the day you write it, it's that it's right on the day you write it and drifts silently afterwards. That's the same reasoning as the sources being read-only and the wishlist storing no computed totals: one fact, one home.
+
+So the index is a **view**, and the trip note is the record. A row that's wrong means the frontmatter is wrong, and the fix is there — hand-editing a row gets reverted the next time the file is rebuilt, which is a feature. A generated index is allowed to be a *file* rather than a query because the vault has to stay readable without Dataview, Obsidian, or this plugin; a rendered table is still plain Markdown, and a stale one is visible rather than silent.
+
+The line to hold: the scaffold ships an empty index, and only the command writes it. Nothing else in the vault is generated, and no command should acquire a second file like this without the same property — rebuildable from the notes, worth nothing on its own.
+
 ## Two config files, split by what belongs in git
 
 `~/.config/pv-personal-kb/config.json` holds the vault's path and secrets. `<vault>/.pkb/config.json` holds everything else — the name, the sources — and is committed.

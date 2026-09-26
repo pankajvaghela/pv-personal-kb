@@ -54,8 +54,10 @@ Home.md                    → entry note
 gitignore                  → MUST be renamed to .gitignore (see below)
 workboard.md               → becomes 10-workboard/workboard.md
 .pkb/config.json           → the vault's own settings — see step 5
-templates/                 → 5 note skeletons
-00-inbox/ … 90-archive/    → the folder taxonomy, emptied, with .gitkeep markers
+templates/                 → note skeletons
+00-inbox/ … 90-archive/    → the folder taxonomy, with .gitkeep markers
+30-lifestyle/wishlist.md   → an empty wishlist
+40-travels/travels.md      → an empty travels index
 ```
 
 Two adjustments after copying:
