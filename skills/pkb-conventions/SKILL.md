@@ -44,6 +44,8 @@ The vault can live anywhere. Resolve it in this order:
 
 Read the config once at the start of a task and use that absolute path for every operation. Never hardcode a vault path into a note, a template, or this plugin's files.
 
+**Two files sit at the vault root that are not notes.** `AGENTS.md` holds these conventions for tools that do not have this plugin. `.pkb-version` records which scaffold version built the vault, and `/pkb-upgrade` reads it. Neither is a note, neither is hand-edited, and neither belongs in the taxonomy.
+
 ## Sources
 
 Some commands read from outside the vault — a calendar, a task list, a Notion inbox. Sources are **declared in the config, never hardcoded**, so adding one is a config edit rather than a code change.

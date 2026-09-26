@@ -79,6 +79,14 @@ Include the `sources` key with two `vault` entries that need no setup — `00-in
 
 Do not add MCP or command sources here. Those depend on what the user has actually connected, and a guessed tool name fails confusingly later. Mention that `/pkb-morning sources` adds them when they want them.
 
+Then stamp the vault, so it knows which scaffold built it. Read the version from `${CLAUDE_PLUGIN_ROOT}/.claude-plugin/plugin.json` and write `<root>/.pkb-version`:
+
+```json
+{ "scaffold": "<plugin version>", "upgraded": "<YYYY-MM-DD>", "plugin": "pv-personal-kb" }
+```
+
+`/pkb-upgrade` reads this later to work out what changed between then and now. Without it, every upgrade has to compare the whole vault blind. Commit it with the vault — it belongs to the vault, not to this machine.
+
 `chmod 600` it. The config holds no secrets, but it is per-machine state and there is no reason for it to be world-readable.
 
 This file is what every other command and the `pkb-librarian` agent resolves the vault from. Confirm the resolved path in the report — a wrong path here shows up as mysterious failures everywhere else.

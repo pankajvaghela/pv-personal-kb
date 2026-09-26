@@ -35,6 +35,26 @@ It asks where the vault should live and what to call it, scaffolds the folders, 
 
 Set up more than one vault by re-running `/pkb-setup` and pointing it somewhere else.
 
+## Updating
+
+Two things update, and only one of them does it by itself.
+
+**The plugin** — commands, skill, agent:
+
+```bash
+claude plugin update pv-personal-kb@pankajvaghela
+```
+
+**The vault** — the folders and scaffold files that `/pkb-setup` copied in. Those are a one-time snapshot, and nothing updates them on its own:
+
+```
+/pkb-upgrade
+```
+
+It compares the vault against the installed plugin: creates folders that are new, copies scaffold files that are missing, and **shows you a diff for any that differ rather than overwriting your edits**. `CHANGELOG.md` records which versions changed structure, and `/pkb-upgrade check` reports without changing anything.
+
+The split is deliberate. A vault is meant to be a folder of files you own, and silently rewriting them on every plugin update is the wrong behaviour for personal notes. An upgrade touches structure and scaffold files only — **never a note**, not one line, and it never deletes or renames anything.
+
 ## What you get
 
 ```
@@ -62,6 +82,7 @@ The numbers are **attention order, not hierarchy**. The folders you touch most s
 | Command | Does |
 |---|---|
 | `/pkb-setup` | Create a vault, or point the plugin at a different one. |
+| `/pkb-upgrade` | Bring an existing vault's structure up to the installed plugin version. |
 | `/pkb-morning` | Start-of-day briefing, built from your configured sources. |
 | `/pkb-end-of-the-day` | Log what actually changed, then commit and push. |
 | `/pkb-capture <thing>` | Throw something into the inbox. No decisions, no sorting. |
