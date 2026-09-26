@@ -92,7 +92,7 @@ The split is deliberate. A vault is meant to be a folder of files you own, and s
 ├── 05-daily/            one note per day, filed under YYYY-MM/
 ├── 10-workboard/        action items, as literal task lists
 ├── 20-goals/            outcomes with a target date
-├── 30-lifestyle/        routines, health, habits, home, money
+├── 30-lifestyle/        routines, health, habits, home, money — and wishlist.md
 ├── 40-travels/          trips, itineraries, places
 ├── 50-projects/         time-bound efforts, one folder each
 ├── 60-people/           one note per person
@@ -114,6 +114,7 @@ The numbers are **attention order, not hierarchy**. The folders you touch most s
 | `/pkb-capture <thing>` | Throw something into the inbox. No decisions, no sorting. |
 | `/pkb-triage` | File inbox items into the right folders — shows a plan first. |
 | `/pkb-workboard` | Show, add, complete, or drop action items. |
+| `/pkb-wishlist` | Show, add to, or resolve the wishlist — held until you've wanted it long enough. |
 | `/pkb-new-project <name>` | Start a project note from the template. |
 | `/pkb-new-person <name>` | Create or update a person note — searches for a duplicate first. |
 | `/pkb-review` | Weekly sweep: inbox count, stale projects, orphan notes, broken links. |
@@ -163,6 +164,20 @@ Two details that make it hold up in practice. The evening command reads `git log
 **Sources are read-only, deliberately.** The briefing never marks a Notion row processed, completes a remote task, or sends mail. Writing back would re-create the two-way sync problem this design exists to avoid. When something is handled, you record it in the vault.
 
 Two things worth knowing before you wire up a source. MCP tool names are specific to your install — `/mcp` lists what you actually have, and the plugin will report a missing tool rather than guess at a similar name. And **credentials never go in the vault**: an `mcp` source's auth belongs to the MCP server, and a `command` source takes `$SECRET:<key>` in its `env`, which resolves from the machine-local config. `/pkb-commit` checks for this specifically, since the vault config is committed.
+
+## The wishlist
+
+`30-lifestyle/wishlist.md` is a single file, one line per wish, and it is built around the way wishlists actually fail. They don't fail at storing things — storing is free. They fail because nothing ever forces a decision, so the list only grows and eventually stops being read.
+
+Two rules do the work:
+
+**Desire is tested by waiting, not recorded.** "How much do I want this?" answered at the moment of wanting is just the impulse talking — which is why high/medium/low priority collapses within a week. Time is the honest measure, so every wish gets a cooling-off period derived from its cost: 7 days under $100, 14 days to $500, 30 days above. Anything with no cost — a place, a skill, a thing to do — gets 30 days, because money is capped and time isn't.
+
+**Importance exempts you from the wait.** A mattress you need but don't want will never clear a cooling-off period with any enthusiasm. Those go under `## Needed` and have no hold at all.
+
+So the file is organized by readiness, not by category, and the review is what makes it real: `/pkb-wishlist review` forces buy, extend, promote, or drop on everything off hold, and flags anything that has been off hold for 60+ days as a decision being avoided rather than a pending purchase. `/pkb-review` sweeps it weekly, which is the only thing that guarantees anyone looks at it.
+
+The exit matters as much as the entry. A wish that gains a target date becomes a **goal**; a place becomes a **trip**; a single next action becomes a **workboard line**. The wishlist is an antechamber, not a destination — and nothing leaves it by being ignored, which is what keeps it from becoming a graveyard. Dropped wishes stay in the file, checked, so you stop re-adding the same thing every few months.
 
 ## Design choices
 

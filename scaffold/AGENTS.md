@@ -66,3 +66,9 @@ Type-specific: `project` gets `owner`/`due`/`outcome`; `person` gets `relationsh
 ## Workboard
 
 `10-workboard/workboard.md` holds literal GFM task lists under `## Now`, `## Next`, `## Waiting`, `## Someday`. One line per action, trailing `#tag` and `📅 YYYY-MM-DD` are the only inline metadata. Completed items are checked, not deleted.
+
+## Wishlist
+
+`30-lifestyle/wishlist.md` holds things that might be wanted, one line each, under `## Off hold` (waiting period over), `## Holding` (still inside it), `## Needed` (actually needed, no wait), and `## Done`.
+
+A wish is deliberately undated and unplanned — that is what makes it a wish. If it acquires a target date it becomes a goal in `20-goals/`; a place becomes a `40-travels/` note; a single next action becomes a workboard line. Nothing ever leaves by being ignored, and nothing computed (totals, day counts) is ever written into the file.

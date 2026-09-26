@@ -7,6 +7,15 @@ Two kinds of change live here, and the difference matters if you have a vault al
 
 Every version below states which it is, so you can tell at a glance whether an upgrade needs action.
 
+## 0.9.0
+
+- Add `/pkb-wishlist` and `30-lifestyle/wishlist.md`: things that might be wanted, held until they have been wanted long enough to trust. Each wish gets a cooling-off period derived from its cost — 7 days under $100, 14 days to $500, 30 days above, and 30 days for anything with no cost at all, since money is capped and time is not.
+- Desire is tested by waiting rather than recorded; `## Needed` is the escape hatch for things actually needed, where the delay is the problem rather than the signal.
+- The wishlist is an antechamber, not a destination: a wish that gains a target date is promoted to `20-goals/`, a place to `40-travels/`, a single action to the workboard. Nothing leaves by being ignored.
+- `/pkb-review` now sweeps the wishlist — its only forcing function.
+- New `wishlist` frontmatter type.
+- **Existing vaults:** run `/pkb-upgrade`. It copies an empty `30-lifestyle/wishlist.md` in if you do not have one. Nothing else changes, and no notes are touched.
+
 ## 0.8.0
 
 - **Config splits in two, by whether it belongs in git.** `<vault>/.pkb/config.json` now holds the vault's own settings — `name` and `sources` — and is committed with the vault, so it is versioned and travels to a new machine. `~/.config/pv-personal-kb/config.json` shrinks to the vault's `root` plus a `secrets` map: the two things that genuinely cannot be committed.

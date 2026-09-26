@@ -117,7 +117,7 @@ If you ever find a literal token in `<root>/.pkb/config.json`, stop and say so. 
 | `05-daily/`     | One note per day, filed by month. Never triaged.               | `daily`       |
 | `10-workboard/` | Action items — what is live right now. See below.              | `workboard`   |
 | `20-goals/`     | Outcomes with a target date.                                   | `goal`        |
-| `30-lifestyle/` | Routines, health, habits, home, money.                         | `lifestyle`   |
+| `30-lifestyle/` | Routines, health, habits, home, money. Holds `wishlist.md`.     | `lifestyle`   |
 | `40-travels/`   | Trips, itineraries, places.                                    | `trip`        |
 | `50-projects/`  | Time-bound efforts with a finish line. One folder per project. | `project`     |
 | `60-people/`    | One note per person.                                           | `person`      |
@@ -138,7 +138,7 @@ Minimum viable. Add a field only when a real query or view consumes it; an unuse
 ```yaml
 ---
 title: Human-readable title
-type: project | person | trip | lifestyle | goal | note | inbox | daily | workboard
+type: project | person | trip | lifestyle | goal | note | inbox | daily | workboard | wishlist
 status: active | paused | done | archived
 created: 2026-09-26
 updated: 2026-09-26
@@ -192,6 +192,34 @@ Rules:
 - The source is literal checkboxes, so `grep` works and any editor's task queries work. A Dataview view on top is fine; a Dataview-only workboard is not — the file has to stay readable as text.
 - Completed items are checked, not deleted. `/pkb-review` sweeps them into `## Done — <month>`.
 - Per-project action items may live inside the project note under `## Actions`. The workboard is for what is live _now_ — promote, do not duplicate.
+
+## Wishlist
+
+`30-lifestyle/wishlist.md` — a single file, one line per wish, held until it has been wanted long enough to trust.
+
+```markdown
+- [ ] Mechanical keyboard — ~$180 — added 2026-08-15 — typing on a $20 membrane board all day #wish/buy
+```
+
+Sections: `## Off hold` (the waiting period is over — needs a decision), `## Holding` (inside it — leave alone), `## Needed` (things actually needed and not being bought, where the delay is the problem rather than the signal; no waiting period), `## Done` (bought or dropped, checked, never deleted).
+
+**The wishlist is an antechamber, not a destination.** A wish has no date and no plan — that is what makes it a wish. It leaves three ways: bought, promoted, or dropped. Never by being ignored, which is the failure mode every wishlist has.
+
+That gives the boundary with everything adjacent, and it is worth holding firmly:
+
+| If it… | It belongs in |
+| --- | --- |
+| Has a target date and a plan | `20-goals/` — the promotion path for most wishes |
+| Is a place to go | `40-travels/` |
+| Needs sustained effort over time | `20-goals/`, or a project if it has a finish line |
+| Is a single next action | `10-workboard/workboard.md` |
+| Is undecided — wanted, not yet earned | here |
+
+**Desire is tested by waiting, not recorded.** Do not add a "how much do I want this" field; asked at the moment of wanting, the answer is the impulse talking, and it is why high/medium/low priority collapses within a week. Time is the honest measure, so the hold period is derived from cost — 7 days under $100, 14 days to $500, 30 days above, and 30 days for anything with no cost at all, because money is capped and time is not.
+
+**Importance is what exempts you from the wait**, and that is its only job here. A need does not become more urgent by sitting on a list for a month.
+
+**Nothing computed is stored.** No totals, no day counts, no "waited 42 days" — those are derived at read time. A stored total is a number that goes stale and has to be maintained.
 
 ## Daily notes
 
