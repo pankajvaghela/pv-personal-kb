@@ -92,7 +92,7 @@ Three kinds, and that is deliberately the whole vocabulary:
 | Folder          | Holds                                                          | `type`        |
 | --------------- | -------------------------------------------------------------- | ------------- |
 | `00-inbox/`     | Unsorted capture, awaiting triage.                             | `inbox`       |
-| `05-daily/`     | One note per day — the briefing record. Never triaged.         | `daily`       |
+| `05-daily/`     | One note per day, filed by month. Never triaged.               | `daily`       |
 | `10-workboard/` | Action items — what is live right now. See below.              | `workboard`   |
 | `20-goals/`     | Outcomes with a target date.                                   | `goal`        |
 | `30-lifestyle/` | Routines, health, habits, home, money.                         | `lifestyle`   |
@@ -104,6 +104,8 @@ Three kinds, and that is deliberately the whole vocabulary:
 | `templates/`    | Note skeletons.                                                | —             |
 
 Numeric prefixes encode **attention order**, not hierarchy — the folders you touch most sort to the top of any file listing. Renumbering rewrites paths, so treat it as a real change: cheap early, expensive once a hundred notes point at each other.
+
+**Two folders use subfolders, and only two.** Daily notes live at `05-daily/YYYY-MM/YYYY-MM-DD.md` — the month level keeps a year of notes browsable instead of leaving a 365-file directory, and it sorts correctly because the prefix is ISO. Create the month folder when it is missing rather than assuming it exists. Projects live at `50-projects/<slug>/`. Everywhere else stays flat; a third level elsewhere needs a reason.
 
 **Nothing is deleted, only archived.** `90-archive/` is what makes "never delete" affordable — a dead project keeps its links.
 

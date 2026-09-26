@@ -77,7 +77,7 @@ Then ask, in one round, which of the **proposed** items to add to the workboard.
 
 On confirmation, two writes.
 
-**a. The daily note — `05-daily/YYYY-MM-DD.md`.** The record of what the day looked like when it started.
+**a. The daily note — `05-daily/YYYY-MM/YYYY-MM-DD.md`.** Notes are filed under the month they belong to, so create the month folder first if it does not exist (`mkdir -p` — never assume it is there). The record of what the day looked like when it started.
 
 ```yaml
 ---
@@ -95,7 +95,7 @@ Beneath it, the briefing exactly as shown, then an empty `## Log` — that is wh
 
 **b. The workboard** — append the confirmed items under `## Now` in `10-workboard/workboard.md`, with `📅 YYYY-MM-DD` when the item carries a date.
 
-**Running this twice on the same day must not duplicate anything.** If `05-daily/<today>.md` exists, update it in place rather than writing a second copy. Before adding a workboard line, check for an existing line with the same text and skip it.
+**Running this twice on the same day must not duplicate anything.** If `05-daily/YYYY-MM/<today>.md` exists, update it in place rather than writing a second copy. Before adding a workboard line, check for an existing line with the same text and skip it.
 
 ## 6 — Report
 

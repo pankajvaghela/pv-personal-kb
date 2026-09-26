@@ -21,7 +21,7 @@ If the `pv-personal-kb` plugin is installed, load the `pkb-conventions` skill â€
 | Folder | Holds |
 |---|---|
 | `00-inbox/` | Unsorted capture awaiting triage. The default landing zone. |
-| `05-daily/` | One note per day â€” the start-of-day briefing record. Never triaged. |
+| `05-daily/` | One note per day, filed under `YYYY-MM/`. Never triaged. |
 | `10-workboard/` | Action items â€” what is live right now. |
 | `20-goals/` | Outcomes with a target date. |
 | `30-lifestyle/` | Routines, health, habits, home, money. |
@@ -33,6 +33,8 @@ If the `pv-personal-kb` plugin is installed, load the `pkb-conventions` skill â€
 | `templates/` | Note skeletons. |
 
 The numeric prefixes encode attention order, not hierarchy.
+
+Only two folders go deeper than one level: `05-daily/YYYY-MM/YYYY-MM-DD.md` and `50-projects/<slug>/`. Create the month folder if it is missing. Everywhere else stays flat.
 
 ## Rules
 

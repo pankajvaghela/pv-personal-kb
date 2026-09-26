@@ -43,7 +43,7 @@ Set up more than one vault by re-running `/pkb-setup` and pointing it somewhere 
 ├── Home.md              entry note
 ├── .gitignore           ignores editor state, keeps your config
 ├── 00-inbox/            unsorted capture — the default landing zone
-├── 05-daily/            one note per day — the start-of-day briefing record
+├── 05-daily/            one note per day, filed under YYYY-MM/
 ├── 10-workboard/        action items, as literal task lists
 ├── 20-goals/            outcomes with a target date
 ├── 30-lifestyle/        routines, health, habits, home, money
