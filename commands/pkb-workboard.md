@@ -18,7 +18,7 @@ Request: $ARGUMENTS
 
 Keep inline metadata to a trailing `#tag` and/or `📅 YYYY-MM-DD`. One line per action, action-first phrasing, no sub-bullets.
 
-**`done <item>`** — mark it `- [x]` in place. Do not move it. `/review` sweeps checked items out.
+**`done <item>`** — mark it `- [x]` in place. Do not move it. `/pkb-review` sweeps checked items out.
 
 **`drop <item>`** — ask why, then either delete the line (if it was never real) or move it to `Someday`. Never silently discard.
 

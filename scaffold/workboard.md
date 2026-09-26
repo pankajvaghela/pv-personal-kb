@@ -27,4 +27,4 @@ Literal task lists, not queries. Keep it readable as plain text — the point is
 
 ## Done — 2026-09
 
-_Swept here by `/review`. Checked items only — never deleted._
+_Swept here by `/pkb-review`. Checked items only — never deleted._

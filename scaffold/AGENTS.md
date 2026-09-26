@@ -2,15 +2,17 @@
 
 This is a personal knowledge base: plain Markdown files with YAML frontmatter. The files are the source of truth. There is no database and no sync.
 
-**Markdown is the format; Obsidian is just the best view of it.** Nothing in this vault requires Obsidian, and no tool should depend on it. The vault should read correctly in a text editor, in a terminal, on GitHub, or in any other editor.
+**Markdown is the format; every app is just a view of it.** Nothing in this vault requires Obsidian or any other editor, and no tool should depend on one. The vault must read correctly in a text editor, in a terminal, on GitHub, or anywhere else.
 
 If the `pv-personal-kb` plugin is installed, load the `pkb-conventions` skill — it holds the authoritative version of everything below. This file is the fallback for tools that do not have the plugin.
 
 ### What is required vs. optional
 
 - **Required:** `.md` files, YAML frontmatter, the folder taxonomy, GFM task lists, `[[wiki-links]]`.
-- **Optional, Obsidian-only:** Dataview queries, callouts (`> [!note]`), embeds (`![[Note]]`), the `📅 YYYY-MM-DD` task marker, and the `{{title}}` / `{{date}}` variables in `templates/`.
-- Prefer plain Markdown where it costs nothing. Use an Obsidian-only feature when it genuinely earns its keep, but know it renders as nothing elsewhere.
+- **Suggested:** a Markdown viewer of your choice. Obsidian is a good one — it renders the links and draws the graph — but it is one option among several, and the vault must never be organized around it.
+- **App-specific, optional:** Dataview queries, callouts (`> [!note]`), embeds (`![[Note]]`), and the `📅 YYYY-MM-DD` task marker. Each renders as nothing outside Obsidian.
+- Prefer plain Markdown where it costs nothing. Use an app-specific feature when it genuinely earns its keep, but know what it costs.
+- `templates/` uses Obsidian's `{{title}}` / `{{date:YYYY-MM-DD}}` variables. Any tool creating a note from one must substitute them — never leave literal braces in a finished note.
 
 `[[wiki-links]]` are not CommonMark — GitHub shows them as literal text. They are the shared convention across file-based PKM tools, and they need only a note's filename rather than a relative path, which is why they are the default here.
 

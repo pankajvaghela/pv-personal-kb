@@ -9,7 +9,7 @@ The vault is plain Markdown files with YAML frontmatter. **The files are the sou
 
 ## What this vault depends on
 
-**Markdown is the format. Everything else is a view of it.** Obsidian is the recommended view — it renders the links, the graph, and the frontmatter — but nothing here requires it. Delete Obsidian tomorrow and the vault is still a directory of readable text.
+**Markdown is the format. Everything else is a view of it.** Nothing here requires Obsidian or any other app. Delete every editor tomorrow and the vault is still a directory of readable text. Viewers are interchangeable — Obsidian, VS Code, iA Writer, GitHub, `less`.
 
 | Thing | Status |
 |---|---|
@@ -17,11 +17,13 @@ The vault is plain Markdown files with YAML frontmatter. **The files are the sou
 | The folder taxonomy | **Required.** Ordinary directories. |
 | GFM task lists | **Required.** Plain checkboxes. |
 | `[[Wiki-links]]` | **Required convention.** Read by Obsidian, Foam, Logseq, Dendron, Quartz, and most other folder-of-Markdown tools. Not CommonMark — see the note below. |
-| Obsidian | Optional. The best view, not a dependency. |
-| Obsidian's Templates plugin | Optional. Substitutes `{{title}}` / `{{date}}` in `templates/`. Claude substitutes them itself, so a note created by a command is correct with or without the plugin. |
-| Dataview, callouts, embeds | Optional. Use them where they earn their keep; they render as nothing outside Obsidian. |
-| `📅 YYYY-MM-DD` on a workboard line | An Obsidian **Tasks** convention. Outside Obsidian it is only an emoji — which is why the date stays readable as plain text. |
+| A Markdown viewer | **Suggested — pick any.** Obsidian is a good one: it renders the links, draws the graph, and shows frontmatter as properties. It is one option among several, not a requirement, and the vault must never be organized around it. |
+| Dataview, callouts, embeds | Optional, and Obsidian-only. Use them where they earn their keep; they render as nothing anywhere else. |
+| `📅 YYYY-MM-DD` on a workboard line | An Obsidian **Tasks** plugin convention. Elsewhere it is just an emoji — which is why the date stays readable as plain text. |
 | `.obsidian/` | Editor state. Git ignores the churn and keeps your config. |
+| `templates/` | Note skeletons using Obsidian's `{{title}}` / `{{date}}` variables. |
+
+**Templates speak Obsidian.** They use `{{title}}` and `{{date:YYYY-MM-DD}}` — the one place the vault depends on an app's syntax, kept because it is what makes the Templates plugin useful. That is a deliberate exception, not a precedent: Claude substitutes these variables itself, so a note created by a command is correct with or without Obsidian. If you edit a template, keep the same variable form so both paths keep working.
 
 **Why wiki-links are deliberate, not accidental.** `[[Note Title]]` is not CommonMark, so GitHub and bare text editors show it as literal text rather than a link. It is still the right default here for two reasons: it is the shared convention across file-based PKM tools, and it needs only the note's **filename**, not a relative path — which matters enormously when an AI writes the link, because a guessed relative path fails silently while a filename is either right or obviously missing.
 
@@ -38,7 +40,7 @@ The vault can live anywhere. Resolve it in this order:
    { "root": "/Users/you/01personal/brain", "name": "Brain" }
    ```
 
-3. **Neither present → stop.** Do not guess a path and do not create a vault by accident. Tell the user the config is missing and that `/setup` creates it.
+3. **Neither present → stop.** Do not guess a path and do not create a vault by accident. Tell the user the config is missing and that `/pkb-setup` creates it.
 
 Read the config once at the start of a task and use that absolute path for every operation. Never hardcode a vault path into a note, a template, or this plugin's files.
 
@@ -66,7 +68,7 @@ Read the config once at the start of a task and use that absolute path for every
 | `90-archive/` | Done, dead, or dormant. Kept so links survive. | *(inherited)* |
 | `templates/` | Note skeletons. | — |
 
-Numeric prefixes encode **attention order**, not hierarchy — the folders you touch most sit at the top of Obsidian's file list. Renumbering rewrites paths, so treat it as a real change: cheap early, expensive once a hundred notes point at each other.
+Numeric prefixes encode **attention order**, not hierarchy — the folders you touch most sort to the top of any file listing. Renumbering rewrites paths, so treat it as a real change: cheap early, expensive once a hundred notes point at each other.
 
 **Nothing is deleted, only archived.** `90-archive/` is what makes "never delete" affordable — a dead project keeps its links.
 
@@ -99,7 +101,7 @@ Type-specific additions:
 
 Wiki-links are the point of the vault: `[[Note Title]]`, `[[Note Title|display text]]`, and `[[Note Title#Heading]]` all work. Link liberally — a link to a note that does not exist yet is a useful marker, not an error.
 
-**Prefer plain Markdown where it costs nothing.** A fenced code block over a callout, a table over a query, a real word over an emoji. The vault should still read correctly in any text editor in ten years, and every Obsidian-only feature you lean on is one more thing that renders as nothing elsewhere. This is a preference, not a prohibition — use the Obsidian feature when it genuinely earns its keep, and do not contort a note to avoid one.
+**Prefer plain Markdown where it costs nothing.** A fenced code block over a callout, a table over a query, a real word over an emoji. The vault should still read correctly in any text editor in ten years, and every app-specific feature you lean on is one more thing that renders as nothing elsewhere. This is a preference, not a prohibition — use the feature when it genuinely earns its keep, and do not contort a note to avoid one.
 
 ## Workboard
 
@@ -119,6 +121,6 @@ Wiki-links are the point of the vault: `[[Note Title]]`, `[[Note Title|display t
 Rules:
 - One line per action. State the action, not the topic.
 - Trailing `#tag` and `📅 YYYY-MM-DD` are the only inline metadata.
-- The source is literal checkboxes, so `grep` and Obsidian's own task queries both work. A Dataview view on top is fine; a Dataview-only workboard is not — the file has to stay readable as text.
-- Completed items are checked, not deleted. `/review` sweeps them into `## Done — <month>`.
+- The source is literal checkboxes, so `grep` works and any editor's task queries work. A Dataview view on top is fine; a Dataview-only workboard is not — the file has to stay readable as text.
+- Completed items are checked, not deleted. `/pkb-review` sweeps them into `## Done — <month>`.
 - Per-project action items may live inside the project note under `## Actions`. The workboard is for what is live *now* — promote, do not duplicate.

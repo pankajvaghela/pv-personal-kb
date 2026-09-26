@@ -9,7 +9,7 @@
       "name": "pv-personal-kb",
       "source": "./",
       "description": "Set up and run a personal knowledge base as a plain-Markdown vault: opinionated folder taxonomy, frictionless capture, inbox triage, a literal-markdown workboard, and git-backed snapshots.",
-      "version": "0.2.0",
+      "version": "0.3.0",
       "author": {
         "name": "Pankaj"
       },

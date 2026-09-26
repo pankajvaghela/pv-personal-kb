@@ -1,15 +1,17 @@
 # --- Editor state -----------------------------------------------------------
 # Obsidian keeps per-machine UI state here. It churns on every open and is
 # never worth a commit; the rest of .obsidian/ is your config and IS worth it.
+# Rules for other editors belong alongside these — this file is not
+# Obsidian-specific, Obsidian is just the case that needs rules.
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
 .obsidian/cache
 .trash/
 
 # --- Credentials ------------------------------------------------------------
-# Obsidian plugins store API tokens in plaintext data.json. If a plugin ever
-# needs one, ignore that plugin's folder specifically rather than committing
-# the token into a repo that may later be pushed.
+# Some editor plugins store API tokens in plaintext. If one ever does, ignore
+# that plugin's folder specifically rather than committing the token into a
+# repo that may later be pushed.
 # .obsidian/plugins/<plugin-name>/data.json
 
 # --- Attachments scratch ----------------------------------------------------

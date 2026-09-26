@@ -76,18 +76,19 @@ This file is what every other command and the `pkb-librarian` agent resolves the
 
 `git -C <path> init -b main`, then `git -C <path> add -A && git -C <path> commit -m "Scaffold the vault"`.
 
-Git is what makes "never delete" safe and gives `/commit` something to work with. Confirm the `.gitignore` is doing its job: `git -C <path> status --porcelain` should show nothing for `.obsidian/` internals, and the commit should not contain `workspace.json`.
+Git is what makes "never delete" safe and gives `/pkb-commit` something to work with. Confirm the `.gitignore` is doing its job: `git -C <path> status --porcelain` should show nothing for `.obsidian/` internals, and the commit should not contain `workspace.json`.
 
 **Do not add a remote and do not create a GitHub repository.** The vault holds personal material and a remote publishes it — that decision belongs to the user and needs a **private** repo. Offer it as a next step and stop there.
 
-## 7 — Report, and hand off to Obsidian
+## 7 — Report
 
 Give the user, compactly:
 
 - Vault path and display name.
 - Config path written.
 - Folder listing, so they can see what they got.
-- **Next step in Obsidian:** *Open folder as vault* → pick the path. Then in Settings → **Files & Links**, set **Template folder location** to `templates/`. Under **Templates → Options**, the templates use `{{title}}` and `{{date:YYYY-MM-DD}}` syntax, which the core Templates plugin substitutes on insert.
-- **Then:** `/capture` to start throwing things in, `/triage` to sort them, `/workboard` to see what is live.
+- **Then:** `/pkb-capture` to start throwing things in, `/pkb-triage` to sort them, `/pkb-workboard` to see what is live.
 
-Do not tell the user the vault is "synced" to anything. It is a folder of files, and that is the point.
+**Mention viewers briefly, as an option — not as a next step.** The vault is a folder of Markdown files, and any editor opens it; it is complete and usable without installing anything. If the user uses Obsidian, two things are worth knowing: *Open folder as vault* → pick the path, and set **Template folder location** to `templates/` in Settings → Files & Links so the Templates plugin substitutes the `{{title}}` and `{{date:YYYY-MM-DD}}` variables. Say this once, then move on.
+
+Do not tell the user the vault is "synced" to anything, and do not imply an app is required to use it. It is a folder of files, and that is the point.
