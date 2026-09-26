@@ -51,6 +51,8 @@ The `why` is one honest line, taken from what the user said. It is what they wil
 
 The sweep. This is the command's real job; `show` is just reading.
 
+**Scope: `## Off hold`, `## Holding`, and `## Needed` — never `## Dreams`.** Dreams share this file but are not wishes: they have no hold, no cost, and no decision to force. `/pkb-dreams` owns that section, and forcing a decision on a dream is the one thing that would ruin it. If the review of anything below seems to want to reach into `## Dreams`, it is wrong.
+
 1. **Off hold — process it.** This is the inbox triage, and it is the reason the command exists. List them with their total, then force one of four answers on each:
    - **Promote** — the usual answer, and the sign the wish has become legible. It is now clear what it is: a goal, a project, a trip, or a workboard line. Buying a specific thing counts here too — "buy the keyboard" is a task, and if it is more than a ten-minute act it belongs on the workboard rather than in this file.
    - **Extend** — still genuinely unclear. Give a new date and one line saying what is unresolved. An extension is allowed, but it has to say something.
@@ -79,3 +81,4 @@ If the request is ambiguous about which item, list the close matches and ask. Ot
 - **Never delete a wish line.** Bought and dropped items are checked, kept, and swept — the record is the anti-re-add mechanism.
 - **Never write a computed value into the file** — no totals, no day counts, no "waited 42 days." Those are derived at read time.
 - **Never accept "leave it" as a review answer.** The whole feature exists to make that answer impossible.
+- **Never touch `## Dreams`.** They share the file and nothing else. No holds, no review, no count, no mortality framing — a dream sits there because it is true about you, not because it is due.

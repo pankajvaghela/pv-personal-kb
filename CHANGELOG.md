@@ -7,6 +7,15 @@ Two kinds of change live here, and the difference matters if you have a vault al
 
 Every version below states which it is, so you can tell at a glance whether an upgrade needs action.
 
+## 0.11.0
+
+- **The life-scale tier is `## Dreams`, not a bucket list.** 0.10.0 put it in `20-goals/` as goal notes with `horizon: life`. That was wrong for the ordinary case: "skydive" needs no research plan, and turning every dream into a project is how a dream list stops being a pleasure. `## Dreams` is now a one-line section at the end of `30-lifestyle/wishlist.md`, alongside wishes and with the same treatment — the difference between a dream and a wish is **time horizon, not weight**.
+- `/pkb-bucket` is replaced by `/pkb-dreams` (`list` / `add` / `done` / `pursue`). No waiting period, no review pressure, no count that should trend to zero.
+- **The wording is deliberate and load-bearing.** It is *dreams* and *things you want to do in your life* — never "bucket list", which comes from "kick the bucket". A list that reads as an invitation gets used; one that reads as a deadline gets avoided.
+- `pursue` is the exit: when a dream gets real, it's promoted to a goal note in `20-goals/` (`horizon: life`) and removed from the list. It hasn't stopped being a dream; it has acquired somewhere to be worked on.
+- `/pkb-review` surfaces only dreams that have started to move. An untouched one is never reported as overdue.
+- **Existing vaults:** add a `## Dreams` section to `30-lifestyle/wishlist.md`, above `## Done`. Nothing else.
+
 ## 0.10.0
 
 - Add `/pkb-curious` and `status: seed`: things worth knowing about eventually — an artist, a period, a question — that are not tasks and not purchases. A seed is a **note** in `70-knowledge/` rather than a list line, because the note is where the learning lands and because a note can be linked to. One line of body is a complete seed.
@@ -18,6 +27,7 @@ Every version below states which it is, so you can tell at a glance whether an u
 - Add `/pkb-bucket`, and `horizon: life` for goals. **There is no bucket list file** — a bucket list item is a goal that has not got a date yet: `20-goals/`, no `target`. The goal template's `## Leading actions` and `## Progress` are already the "slowly work towards it" loop, and `/pkb-bucket work <item>` is that loop with somewhere to put what you find out. When a date appears, set `target` and narrow `horizon` — same note, now scheduled.
 - `/pkb-review` surfaces bucket list items only when they have started to move. An undated one is never reported as overdue; waiting years is what makes it a bucket list rather than a backlog.
 - **Existing vaults:** nothing to do. No new folders or files; `status: seed` and `horizon: life` are new values on existing fields. Copy in the updated `templates/goal.md` if you want the horizon hint.
+- _Superseded in 0.11.0: the life-scale tier is a `## Dreams` section in the wishlist file, not goal notes. `/pkb-bucket` is now `/pkb-dreams`._
 
 ## 0.9.0
 

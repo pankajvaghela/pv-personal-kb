@@ -116,7 +116,7 @@ If you ever find a literal token in `<root>/.pkb/config.json`, stop and say so. 
 | `00-inbox/`     | Unsorted capture, awaiting triage.                             | `inbox`       |
 | `05-daily/`     | One note per day, filed by month. Never triaged.               | `daily`       |
 | `10-workboard/` | Action items — what is live right now. See below.              | `workboard`   |
-| `20-goals/`     | Outcomes — dated, or on the bucket list at `horizon: life`.    | `goal`        |
+| `20-goals/`     | Outcomes — dated, or life-scale at `horizon: life`.            | `goal`        |
 | `30-lifestyle/` | Routines, health, habits, home, money. Holds `wishlist.md`.     | `lifestyle`   |
 | `40-travels/`   | Trips, itineraries, places.                                    | `trip`        |
 | `50-projects/`  | Time-bound efforts with a finish line. One folder per project. | `project`     |
@@ -265,17 +265,17 @@ The body is optional, and one line is a complete seed — why it is worth knowin
 
 A seed can lead to a wish, and that is a link rather than a conversion: the wishlist line references `[[Jan Schoonhoven]]` and the seed stays where it is.
 
-## The bucket list
+## Dreams
 
-**There is no bucket list folder, file, or type. A bucket list item is a goal that has not got a date yet** — `20-goals/`, `type: goal`, `horizon: life`, no `target`.
+`## Dreams` is the last section of `30-lifestyle/wishlist.md`: things you want to do in your life. `Skydive`, `See the Northern Lights`, `Learn to sail`.
 
-It is a note rather than a list line because of what the user does with it: accumulates research, names leading actions, and records progress. `## Leading actions` and `## Progress` in the goal template are exactly that machinery, and they already exist. A wishlist line can hold none of it.
+**Dreams are what you want your life to have in it; wishes are what you want next.** Both are wants and both are one line — the difference is **time horizon, not weight**. A dream is not a goal, a project, or a note; "skydive" needs no research plan and no `## Leading actions`, and treating every dream as a project is how a dream list stops being a pleasure.
 
-**The difference from a wish** is scale and certainty, not kind. Both end in an act; a wish is something you would *like*, decided within months, and a bucket list item is something you would **regret never doing**. The practical test is whether it needs a note: if one line is enough, it is a wish; if it needs research and a plan, it is a goal.
+**Language matters, and it is not decoration.** Say *dreams*, *things you want to do in your life*, *what you want your life to have in it*. Never "before you die", and never "bucket list" — that phrase comes from "kick the bucket", and this section is about living, not about mortality. A list that reads as an invitation gets used; one that reads as a deadline gets avoided.
 
-**The difference from a goal** is only the date. When a bucket list item acquires one, set `target` and narrow `horizon` to `year` or `quarter`. Nothing moves and nothing converts — it is the same note, now scheduled, and every link to it still works. That transition is the whole point: the bucket list exists so that life-scale wants accumulate until one of them becomes real.
+**No waiting period, no review pressure, no count.** A dream sits on the list because it is true about you, not because it is due. It is allowed to wait years and nothing is wrong while it does, so `/pkb-review` surfaces only the ones that have started to move. **Never report an untouched dream as overdue, stale, or forgotten.**
 
-**No urgency, and no forced review.** A bucket list item is allowed to sit for years; that is what makes it a bucket list rather than a backlog. `/pkb-review` may ask whether any are ready to become real, but it must never imply that an unscheduled one is overdue.
+**The exit is pursuit.** When a dream gets real — cost looked into, a date forming, money to save, a skill to build first — it is promoted to a goal note in `20-goals/` (`horizon: life`) and removed from the list. It has not stopped being a dream; it has acquired somewhere to be worked on. That is what `## Leading actions` and `## Progress` in the goal template are for, and it is the only reason to leave the one-line form.
 
 ## Daily notes
 

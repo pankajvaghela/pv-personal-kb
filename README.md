@@ -116,7 +116,7 @@ The numbers are **attention order, not hierarchy**. The folders you touch most s
 | `/pkb-workboard` | Show, add, complete, or drop action items. |
 | `/pkb-wishlist` | Show, add to, or resolve the wishlist — the inbox for desire. |
 | `/pkb-curious` | Note something you want to know about — a seed note, no deadline. |
-| `/pkb-bucket` | Bucket list — life-scale things to do, with room to research them. |
+| `/pkb-dreams` | Dreams — things you want to do in your life. |
 | `/pkb-new-project <name>` | Start a project note from the template. |
 | `/pkb-new-person <name>` | Create or update a person note — searches for a duplicate first. |
 | `/pkb-review` | Weekly sweep: inbox count, stale projects, orphan notes, broken links. |
@@ -193,15 +193,15 @@ The dividing line is **what the thing ends in**. Ends in an act — buy it, go t
 
 A seed has no urgency and must never acquire any: no due date, no count that should trend to zero. A seed you haven't gotten to isn't a failure and a list of forty isn't a problem. The moment seeds get treated as a backlog they stop being curiosities and start being guilt — which is why `/pkb-review`'s orphan-notes section explicitly skips them. `/pkb-curious` creates one, `list`s them, and `open`s one when you finally dig in.
 
-### The bucket list
+### Dreams
 
-Same treatment, third tier. **There is no bucket list file** — a bucket list item is a goal that hasn't got a date yet: `20-goals/`, `horizon: life`, no `target`.
+Third tier, same treatment. `## Dreams` is the last section of the same wishlist file: things you want to do in your life. `Skydive`, `See the Northern Lights`, `Learn to sail`.
 
-It's a note rather than a line because of what you do with it. `templates/goal.md` already has `## What done looks like`, `## Leading actions`, and `## Progress` — that's the "slowly add notes and work towards it" loop, already built. `/pkb-bucket work <item>` is that loop with somewhere to put what you find out.
+**Dreams are what you want your life to have in it; wishes are what you want next.** Both are wants and both are one line — the difference is time horizon, not weight. A dream isn't a goal or a project; "skydive" needs no research plan, and turning every dream into a project is how a dream list stops being a pleasure.
 
-The difference from a wish is scale, not kind: a wish is something you'd *like*, a bucket list item is something you'd **regret never doing**. Practical test — if one line is enough it's a wish; if it needs a note to hold your research, it's a goal. The difference from a normal goal is only the date: when one appears, you set `target` and narrow `horizon`, same note, now scheduled.
+The wording is deliberate throughout: it's *dreams* and *things you want to do in your life*, never "bucket list" — that phrase comes from "kick the bucket". This section is about living, not about mortality, and a list that reads as an invitation gets used where one that reads as a deadline gets avoided.
 
-And no pressure, deliberately. A bucket list item is allowed to wait years — that's what makes it a bucket list rather than a backlog. `/pkb-review` surfaces only the ones that have started to move, because that's the one useful signal.
+No pressure, and that's the point. A dream is on the list because it's true about you, not because it's due — it's allowed to wait years. `/pkb-review` surfaces only the ones that have *started to move*, and never reports an untouched one as overdue. When a dream gets real — a date forming, money to save, a skill to build first — `/pkb-dreams pursue` promotes it to a goal note in `20-goals/` where `## Leading actions` and `## Progress` can hold the working-out. It hasn't stopped being a dream; it's acquired somewhere to be worked on.
 
 The three tiers together:
 
@@ -209,7 +209,7 @@ The three tiers together:
 |---|---|---|
 | Curiosity — ends in knowing | `70-knowledge/` seed | none, ever |
 | Wish — ends in an act, months out | `30-lifestyle/wishlist.md` line | forced at hold expiry |
-| Bucket list — ends in an act, life-scale | `20-goals/` note, `horizon: life` | none, but momentum gets surfaced |
+| Dream — ends in an act, life-scale | `30-lifestyle/wishlist.md` line, `## Dreams` | none, but momentum gets surfaced |
 
 ## Design choices
 

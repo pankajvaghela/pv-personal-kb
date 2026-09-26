@@ -35,6 +35,12 @@ Not wishes — things I actually need and keep not buying, where the delay is th
 
 - [ ] _Nothing yet._
 
+## Dreams
+
+Things I want to do in my life. No waiting period and no review pressure — this is what I want my life to have in it, not what I want next. Dreams are allowed to sit here for years, and nothing is wrong while they do.
+
+- [ ] _Nothing yet._
+
 ## Done
 
 Bought or dropped. Checked, never deleted — so I stop re-adding the same thing every few months.

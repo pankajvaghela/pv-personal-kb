@@ -13,7 +13,7 @@ tags: []
 
 **Target date:**
 
-**Horizon:** _life | year | quarter | season_ — `life` means it is on the bucket list: wanted, no date yet
+**Horizon:** _life | year | quarter | season_ — `life` means it came from `## Dreams`: wanted, no date yet
 
 ## What done looks like
 
